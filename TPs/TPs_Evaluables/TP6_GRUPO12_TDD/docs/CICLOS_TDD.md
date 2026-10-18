@@ -24,8 +24,25 @@ Falla porque el servicio de inscripciones todavía no existe.
 
 ### Green
 
-Pendiente de ejecución.
+Se creó `backend/src/servicios/inscripciones.js`: consulta la actividad, genera un código opaco con `randomUUID`, guarda la inscripción y devuelve su confirmación. Las aserciones del test se mantuvieron.
+
+Verificación ejecutada el 18/10/2026:
+
+```sh
+node --preserve-symlinks --preserve-symlinks-main node_modules/jest/bin/jest.js --config backend/package.json --runInBand
+```
+
+```text
+Test Suites: 3 passed, 3 total
+Tests:       18 todo, 5 passed, 23 total
+```
+
+Se ejecutó Jest directamente con estas opciones para evitar un error EPERM en la resolución de rutas del entorno al usar npm.
+
+Este incremento cubre solo el caso individual válido en memoria. Las validaciones, cupos, SQLite, QR y correo quedan pendientes para nuevos ciclos TDD.
 
 ### Refactor
 
 Pendiente de ejecución.
+
+

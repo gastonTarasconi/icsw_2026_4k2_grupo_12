@@ -9,7 +9,7 @@ Historia: InscribirmeActividad. Los casos positivos y negativos de esta tabla so
 | CA-03 | Turnos de 09:00 a 17:00 | Pendiente | Pendiente | Pendiente |
 | CA-04 | Días de cierre | Pendiente | Pendiente | Pendiente |
 | CA-05 | Ventana de inscripción | Pendiente | Pendiente | Pendiente |
-| CA-06 | Inscripción individual y grupal | `test_InscribirmeActividad_ActividadConCupo_Pasa` | Pendiente | Red del caso individual; falta caso grupal |
+| CA-06 | Inscripción individual y grupal | `test_InscribirmeActividad_ActividadConCupo_Pasa` | Pendiente | Green del caso individual; faltan caso negativo y grupal |
 | CA-07 | DNI y edad obligatorios; nombre opcional | Pendiente | Pendiente | Pendiente |
 | CA-08 | Edades mínimas por actividad | Pendiente | Pendiente | Pendiente |
 | CA-09 | Talla válida cuando corresponde | Pendiente | Pendiente | Pendiente |
@@ -21,4 +21,5 @@ Historia: InscribirmeActividad. Los casos positivos y negativos de esta tabla so
 | CA-15 | Registro, resumen y QR | Pendiente | Pendiente | Pendiente |
 | CA-16 | Correo de confirmación | Pendiente | Pendiente | Pendiente |
 
-El test del primer ciclo verifica el registro individual en memoria y su código de confirmación. No completa CA-15: faltan persistencia SQLite, resumen y QR. Las pruebas de infraestructura y los `test.todo` no cuentan como los casos de aceptación requeridos. Ningún criterio se considera completado en esta fase Red.
+El test del primer ciclo verifica el registro individual en memoria y su código de confirmación. No completa CA-15: faltan persistencia SQLite, resumen y QR. Las pruebas de infraestructura y los `test.todo` no cuentan como los casos de aceptación requeridos. El primer caso individual pasó a Green; ningún criterio se considera completado con este único caso.
+

@@ -53,7 +53,7 @@ describe('Inscribirme a actividad', () => {
 
   test('test_InscribirmeActividad_ActividadConCupo_Pasa', async () => {
     // Precondición: la Tirolesa del sábado a las 10:00 tiene sus 10 lugares libres.
-    // El servicio todavía no existe: este es el fallo esperado de la fase Red.
+    // Primer ciclo TDD: el servicio mínimo permite pasar este caso a Green.
     const { crearServicioInscripciones } = require('../src/servicios/inscripciones');
     const servicio = crearServicioInscripciones({ repositorio, obtenerAhora });
 
@@ -74,3 +74,4 @@ describe('Inscribirme a actividad', () => {
     }));
   });
 });
+
