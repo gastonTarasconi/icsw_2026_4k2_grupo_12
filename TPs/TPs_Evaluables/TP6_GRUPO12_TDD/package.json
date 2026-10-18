@@ -1,0 +1,15 @@
+{
+  "name": "eco-harmony-park",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": ["backend", "frontend"],
+  "engines": { "node": ">=22.13.0" },
+  "scripts": {
+    "dev:backend": "npm run dev --workspace backend",
+    "dev:frontend": "npm run dev --workspace frontend",
+    "inicializar": "npm run inicializar --workspace backend",
+    "test": "npm test --workspace backend",
+    "test:watch": "npm run test:watch --workspace backend",
+    "build": "npm run build --workspace frontend"
+  }
+}

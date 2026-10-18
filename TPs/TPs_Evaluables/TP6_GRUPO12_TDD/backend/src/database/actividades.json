@@ -1,0 +1,58 @@
+[
+  {
+    "id": "safari",
+    "nombre": "Safari",
+    "descripcion": "Un recorrido para descubrir la fauna y el entorno natural del parque.",
+    "edadMinima": 0,
+    "capacidad": 8,
+    "requiereTalla": false,
+    "terminos": {
+      "generales": "Las siguientes condiciones corresponden a reglas ya establecidas:\n• El parque permanece abierto todos los días, excepto los lunes, el 1 de enero y el 25 de diciembre.\n• El horario de funcionamiento del parque es de 08:30 a 19:00.\n• Las actividades tienen una duración de una hora y sus turnos comienzan cada hora, desde las 09:00 hasta las 17:00 inclusive.\n• Las inscripciones pueden realizarse dentro de las 24 horas anteriores al turno y hasta 15 minutos antes de su inicio.\n• Para inscribirse, se debe seleccionar una actividad, un horario disponible e indicar la cantidad de participantes.\n• Por cada participante se deben ingresar nombre, DNI, edad y talle de vestimenta cuando la actividad lo requiera.\n• La inscripción está sujeta a la disponibilidad de cupos.\n• Una misma persona no puede inscribirse en actividades cuyos horarios se superpongan.\n• Para confirmar la inscripción es obligatorio aceptar los términos y condiciones específicos de la actividad seleccionada.\n• Una vez realizada la inscripción, se debe generar una confirmación por correo electrónico con el resumen correspondiente y los códigos QR.",
+      "especificos": "Condiciones confirmadas :\n• La actividad admite participantes de todas las edades.\n• El cupo máximo es de 8 participantes por turno.\n• No requiere ingresar talle de vestimenta.\n\nCondiciones particulares propuestas para validación :\n1. Los participantes deberán respetar las indicaciones proporcionadas por el personal responsable durante el desarrollo de la actividad.\n2. Los participantes deberán permanecer dentro de los recorridos y sectores habilitados para Safari.\n3. No se permitirá alimentar ni tocar a los animales sin autorización expresa del personal responsable.\n4. Los participantes deberán mantener una conducta respetuosa hacia los animales, las demás personas y el entorno natural.\n\nAceptación : Al aceptar los presentes términos y condiciones, el visitante declara conocer las condiciones de inscripción y se compromete a respetar las normas de participación aprobadas para Safari.",
+      "estado": "Propuesta pendiente de validación del Product Owner",
+      "fuente": "/terminos-y-condiciones.pdf"
+    }
+  },
+  {
+    "id": "palestra",
+    "nombre": "Palestra",
+    "descripcion": "Un desafío de escalada para disfrutar una experiencia en altura.",
+    "edadMinima": 12,
+    "capacidad": 12,
+    "requiereTalla": true,
+    "terminos": {
+      "generales": "Las siguientes condiciones corresponden a reglas ya establecidas:\n• El parque permanece abierto todos los días, excepto los lunes, el 1 de enero y el 25 de diciembre.\n• El horario de funcionamiento del parque es de 08:30 a 19:00.\n• Las actividades tienen una duración de una hora y sus turnos comienzan cada hora, desde las 09:00 hasta las 17:00 inclusive.\n• Las inscripciones pueden realizarse dentro de las 24 horas anteriores al turno y hasta 15 minutos antes de su inicio.\n• Para inscribirse, se debe seleccionar una actividad, un horario disponible e indicar la cantidad de participantes.\n• Por cada participante se deben ingresar nombre, DNI, edad y talle de vestimenta cuando la actividad lo requiera.\n• La inscripción está sujeta a la disponibilidad de cupos.\n• Una misma persona no puede inscribirse en actividades cuyos horarios se superpongan.\n• Para confirmar la inscripción es obligatorio aceptar los términos y condiciones específicos de la actividad seleccionada.\n• Una vez realizada la inscripción, se debe generar una confirmación por correo electrónico con el resumen correspondiente y los códigos QR.",
+      "especificos": "Condiciones confirmadas :\n• La edad mínima para participar es de 12 años inclusive.\n• El cupo máximo es de 12 participantes por turno.\n• Es obligatorio seleccionar un talle de vestimenta entre XS, S, M, L, XL y XXL.\n\nCondiciones particulares propuestas para validación :\n1. Los participantes deberán escuchar y respetar las indicaciones del personal responsable antes y durante la actividad.\n2. Será obligatorio utilizar correctamente los elementos de seguridad que indique el personal.\n3. Los participantes podrán comenzar la actividad únicamente cuando el personal responsable lo autorice.\n4. Ante cualquier inconveniente relacionado con el equipamiento o las instrucciones recibidas, el participante deberá comunicarlo al personal responsable.\n5. Los participantes deberán respetar las indicaciones de suspensión o finalización de la actividad comunicadas por el personal.\n\nAceptación : Al aceptar los presentes términos y condiciones, el visitante declara conocer los requisitos de inscripción y se compromete a respetar las normas de seguridad y participación aprobadas para Palestra.",
+      "estado": "Propuesta pendiente de validación del Product Owner",
+      "fuente": "/terminos-y-condiciones.pdf"
+    }
+  },
+  {
+    "id": "jardineria",
+    "nombre": "Jardinería",
+    "descripcion": "Un espacio para acercarte a las plantas y al cuidado de la naturaleza.",
+    "edadMinima": 0,
+    "capacidad": 12,
+    "requiereTalla": false,
+    "terminos": {
+      "generales": "Las siguientes condiciones corresponden a reglas ya establecidas:\n• El parque permanece abierto todos los días, excepto los lunes, el 1 de enero y el 25 de diciembre.\n• El horario de funcionamiento del parque es de 08:30 a 19:00.\n• Las actividades tienen una duración de una hora y sus turnos comienzan cada hora, desde las 09:00 hasta las 17:00 inclusive.\n• Las inscripciones pueden realizarse dentro de las 24 horas anteriores al turno y hasta 15 minutos antes de su inicio.\n• Para inscribirse, se debe seleccionar una actividad, un horario disponible e indicar la cantidad de participantes.\n• Por cada participante se deben ingresar nombre, DNI, edad y talle de vestimenta cuando la actividad lo requiera.\n• La inscripción está sujeta a la disponibilidad de cupos.\n• Una misma persona no puede inscribirse en actividades cuyos horarios se superpongan.\n• Para confirmar la inscripción es obligatorio aceptar los términos y condiciones específicos de la actividad seleccionada.\n• Una vez realizada la inscripción, se debe generar una confirmación por correo electrónico con el resumen correspondiente y los códigos QR.",
+      "especificos": "Condiciones confirmadas :\n• La actividad admite participantes de todas las edades.\n• El cupo máximo es de 12 participantes por turno.\n• No requiere ingresar talle de vestimenta.\n\nCondiciones particulares propuestas para validación :\n1. Los participantes deberán seguir las indicaciones del personal responsable sobre el uso de herramientas y materiales.\n2. Las actividades deberán desarrollarse dentro de los espacios habilitados para Jardinería.\n3. Los participantes deberán cuidar las plantas, los materiales y las instalaciones utilizadas durante la actividad.\n4. Las herramientas y los materiales deberán utilizarse únicamente para las tareas indicadas por el personal responsable.\n5. Al finalizar la actividad, los participantes deberán devolver las herramientas y los materiales al lugar indicado.\n\nAceptación: Al aceptar los presentes términos y condiciones, el visitante declara conocer las condiciones de inscripción y se compromete a respetar las normas de participación y cuidado del entorno aprobadas para Jardinería.",
+      "estado": "Propuesta pendiente de validación del Product Owner",
+      "fuente": "/terminos-y-condiciones.pdf"
+    }
+  },
+  {
+    "id": "tirolesa",
+    "nombre": "Tirolesa",
+    "descripcion": "Una experiencia para vivir la aventura desde otra perspectiva.",
+    "edadMinima": 8,
+    "capacidad": 10,
+    "requiereTalla": true,
+    "terminos": {
+      "generales": "Las siguientes condiciones corresponden a reglas ya establecidas:\n• El parque permanece abierto todos los días, excepto los lunes, el 1 de enero y el 25 de diciembre.\n• El horario de funcionamiento del parque es de 08:30 a 19:00.\n• Las actividades tienen una duración de una hora y sus turnos comienzan cada hora, desde las 09:00 hasta las 17:00 inclusive.\n• Las inscripciones pueden realizarse dentro de las 24 horas anteriores al turno y hasta 15 minutos antes de su inicio.\n• Para inscribirse, se debe seleccionar una actividad, un horario disponible e indicar la cantidad de participantes.\n• Por cada participante se deben ingresar nombre, DNI, edad y talle de vestimenta cuando la actividad lo requiera.\n• La inscripción está sujeta a la disponibilidad de cupos.\n• Una misma persona no puede inscribirse en actividades cuyos horarios se superpongan.\n• Para confirmar la inscripción es obligatorio aceptar los términos y condiciones específicos de la actividad seleccionada.\n• Una vez realizada la inscripción, se debe generar una confirmación por correo electrónico con el resumen correspondiente y los códigos QR.",
+      "especificos": "Condiciones confirmadas :\n• La edad mínima para participar es de 8 años inclusive.\n• El cupo máximo es de 10 participantes por turno.\n• Es obligatorio seleccionar un talle de vestimenta entre XS, S, M, L, XL y XXL.\n\nCondiciones particulares propuestas para validación :\n1. Los participantes deberán seguir las instrucciones proporcionadas por el personal responsable sobre el uso del equipamiento.\n2. Será obligatorio utilizar los elementos de seguridad indicados por el personal.\n3. Ningún participante podrá comenzar el recorrido sin autorización del personal responsable.\n4. No se permitirá manipular o retirar elementos de seguridad sin indicación del personal.\n5. Cualquier inconveniente detectado en el equipamiento deberá comunicarse al personal antes del inicio de la actividad.\n\nAceptación : Al aceptar los presentes términos y condiciones, el visitante declara conocer los requisitos de inscripción y se compromete a respetar las normas de seguridad y participación aprobadas para Tirolesa.",
+      "estado": "Propuesta pendiente de validación del Product Owner",
+      "fuente": "/terminos-y-condiciones.pdf"
+    }
+  }
+]
