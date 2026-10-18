@@ -1,6 +1,6 @@
 # Eco Harmony Park
 
-Base del TP 6 de Ingeniería y Calidad de Software. Incluye catálogo, términos por actividad, logo, API Express y SQLite. La US- de inscripción está pendiente para desarrollarla después aplicando TDD.
+Base del TP 6 de Ingeniería y Calidad de Software. Incluye catálogo, términos por actividad, logo, API Express y SQLite. La US-01 de inscripción está pendiente para desarrollarla después aplicando TDD.
 
 ## Requisitos
 
@@ -102,3 +102,11 @@ git add .
 git commit -m "Agregar base de Eco Harmony Park"
 ```
 
+Crear un repositorio vacío en el servicio elegido, agregar su URL con `git remote add origin URL_DEL_REPOSITORIO` y subir la rama actual. No se inicializó ni publicó un repositorio automáticamente. `.gitignore` excluye dependencias, bases locales, compilados y variables privadas; `package-lock.json` sí se versiona. Los documentos originales de la raíz quedan como referencia del TP.
+
+
+
+para probar tests 
+
+
+npm test --workspace backend -- --runTestsByPath tests/inscribirmeActividad.test.js
