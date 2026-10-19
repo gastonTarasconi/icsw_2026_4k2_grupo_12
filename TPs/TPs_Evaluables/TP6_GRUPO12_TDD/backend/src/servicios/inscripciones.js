@@ -1,5 +1,6 @@
 
 const { randomUUID } = require('node:crypto');
+const { prepararConfirmacionCorreo } = require('./confirmacionCorreo');
 
 const TALLAS = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
@@ -269,22 +270,10 @@ function crearServicioInscripciones({
       await repositorio.guardarInscripcion(inscripcion);
 
       // 12. Preparar la confirmacion.
-      const confirmacionCorreo = {
-        destinatario: inscripcion.email,
-        resumen: {
-          codigo: inscripcion.codigo,
-          actividad: actividad.nombre,
-          fecha: inscripcion.fecha,
-          horario: inscripcion.horario,
-          cantidadPersonas: inscripcion.cantidadPersonas
-        },
-        participantes: inscripcion.participantes.map(
-          participante => ({ ...participante })
-        ),
-        codigosQR: inscripcion.participantes.map(
-          (_, i) => `${inscripcion.codigo}-${i + 1}`
-        )
-      };
+      const confirmacionCorreo = prepararConfirmacionCorreo(
+        inscripcion,
+        actividad
+      );
 
       // 13. Devolver la confirmacion.
       return {
