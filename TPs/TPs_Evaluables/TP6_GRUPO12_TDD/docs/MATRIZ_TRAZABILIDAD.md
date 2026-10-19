@@ -210,3 +210,91 @@ No se deben reutilizar automáticamente los precios de la historia de compra de 
 - Código y pruebas automatizadas del proyecto.
 
 Las verificaciones pendientes representan límites de la evidencia actual y no deben presentarse como funcionalidades completamente comprobadas.
+
+
+---
+
+## 11. Estado actualizado de la trazabilidad - 19/10/2026
+
+Esta sección registra los resultados más recientes y reemplaza los estados anteriores que mencionan 64 pruebas, 18 test.todo o verificaciones que ya fueron completadas. Los resultados anteriores se conservan como evidencia histórica.
+
+### Resultado automatizado vigente
+
+```text
+Test Suites: 12 passed, 12 total
+Tests:       71 passed, 71 total
+Snapshots:   0 total
+```
+
+El frontend compiló correctamente mediante `npm.cmd run build`.
+
+No existen pruebas fallidas ni casos `test.todo` pendientes en Jest.
+
+### Actualización de criterios
+
+| Criterio | Evidencia incorporada | Estado actualizado |
+| --- | --- | --- |
+| CA-03 | `verificacionesPendientes.test.js` comprueba 09:00 y 17:00 | Cubierto en los límites probados |
+| CA-06 | Prueba de grupo inválido sin registros parciales | Cubierto en SQLite para el caso probado |
+| CA-10 | `concurrenciaCupos.test.js` comprueba dos solicitudes por el último cupo | Cubierto en una instancia de la aplicación |
+| CA-12 | Prueba de persistencia de aceptación de términos | Cubierto en SQLite |
+| CA-13 | Verificación de cupos mediante solicitudes concurrentes | Cubierto para el escenario probado |
+| CA-14 | Rechazo de correo ausente, vacío o inválido y grupos inválidos | Cubierto para los errores probados |
+| CA-15 | Confirmación con QR y verificación de identificadores sin DNI ni correo | Cubierto para generación; lectura no implementada |
+| CA-16 | Pruebas de correo simulado y SMTP con transporte controlado | Automatizado; entrega real pendiente |
+
+### Privacidad de la consulta
+
+Se agregó `privacidadInscripciones.test.js`.
+
+La consulta `GET /api/inscripciones/:codigo` devuelve únicamente:
+
+- Código de inscripción.
+- Identificador de actividad.
+- Fecha.
+- Horario.
+- Cantidad de participantes.
+
+Los datos personales permanecen almacenados, pero no se incluyen en esa respuesta.
+
+Commits TDD:
+
+- RED: `c2f2437`
+- GREEN: `7116142`
+- REFACTOR: `eeeeb28`
+
+La consulta por código no implementa autenticación.
+
+### Verificaciones manuales
+
+Se comprobaron desde el navegador los siguientes recorridos:
+
+- **Tirolesa:** inscripción individual, confirmación y QR.
+- **Palestra:** inscripción grupal con dos participantes y dos QR diferentes.
+- **Palestra:** rechazo desde el formulario de un participante de 11 años.
+- **Safari:** inscripción de un participante de 5 años sin talle.
+- **Jardinería:** inscripción de un participante de 6 años sin talle.
+
+Las pruebas se realizaron con reloj simulado, base de datos temporal y correo simulado.
+
+Estas verificaciones no demuestran la recepción real de Gmail ni la lectura de códigos QR.
+
+### Mantenimiento y seguridad
+
+Se actualizó Jest a la versión 30.5.2 mediante el commit `0504e71`.
+
+Resultados de auditoría:
+
+- 0 vulnerabilidades reportadas en dependencias de producción.
+- 0 alertas altas en la instalación completa.
+- 19 alertas moderadas en dependencias de desarrollo.
+
+La contraseña de aplicación de Gmail anteriormente publicada debe ser revocada por su propietario.
+
+### Estado de los antiguos test.todo
+
+Los 18 recordatorios fueron revisados y el archivo `inscripciones.pendientes.test.js` se retiró mediante el commit `517ce96`.
+
+La eliminación no redujo la cantidad de pruebas ejecutables aprobadas.
+
+Las 71 pruebas actuales son verificaciones automatizadas, no 71 ciclos TDD independientes.
