@@ -166,3 +166,77 @@ Estos resultados demuestran que las pruebas existentes pasan. No equivalen a una
 9. Coordinar con el grupo la revisión de la rama y su eventual integración a `main`.
 
 No se considera completada una verificación que todavía no haya sido ejecutada.
+
+
+---
+
+## 19/10/2026 — Cierre de funcionalidades y verificaciones
+
+Esta actualización refleja el estado más reciente del TP6. Los resultados y pendientes anotados en fechas anteriores se conservan como evidencia histórica.
+
+### Confirmación y correo
+
+Se completaron ciclos RED-GREEN-REFACTOR para el resumen de confirmación y QR, la validación del formato de correo y la obligatoriedad del correo electrónico.
+
+Se incorporaron pruebas de correo simulado y de transporte SMTP controlado. No se verificó la recepción real de mensajes en Gmail.
+
+### Persistencia y concurrencia
+
+Se agregó una prueba de dos solicitudes por el último cupo de Tirolesa (`928bb57`).
+
+Se comprobó que no se supera la capacidad del turno en el escenario probado y que una solicitud rechazada no ocupa un lugar adicional.
+
+Se incorporaron cinco verificaciones complementarias (`29ee29a`) sobre horarios límite, aceptación de términos, grupos inválidos y contenido de QR.
+
+### Privacidad de inscripciones
+
+Se implementó un ciclo RED-GREEN-REFACTOR para limitar los datos devueltos por la consulta de inscripciones:
+
+- RED: `c2f2437`.
+- GREEN: `7116142`.
+- REFACTOR: `eeeeb28`.
+
+La consulta devuelve un resumen sin DNI ni correo electrónico. No se implementó autenticación para esa consulta.
+
+### Revisión de pruebas pendientes
+
+Se revisaron y retiraron los 18 recordatorios `test.todo` (`517ce96`). El historial de Git conserva el archivo anterior.
+
+El resultado final registrado es de 71 pruebas automatizadas aprobadas, 12 suites aprobadas y ninguna prueba fallida o pendiente.
+
+### Verificaciones manuales
+
+Se probaron desde el navegador las cuatro actividades:
+
+- Tirolesa: inscripción individual y QR.
+- Palestra: inscripción grupal y dos QR distintos; también se comprobó el rechazo por edad.
+- Safari: participante de 5 años sin talle.
+- Jardinería: participante de 6 años sin talle.
+
+Las pruebas utilizaron reloj simulado, base SQLite temporal y correo simulado. La compilación de Vite terminó correctamente.
+
+### Mantenimiento y seguridad
+
+Se actualizó Jest a 30.5.2 (`0504e71`).
+
+La auditoría registró 0 vulnerabilidades de producción y 19 alertas moderadas en dependencias de desarrollo.
+
+El propietario de la cuenta Gmail debe revocar la contraseña de aplicación expuesta anteriormente en el historial de Git.
+
+### Documentación y publicación
+
+Se actualizaron:
+
+- Ciclos TDD: `a28fba7`.
+- README y verificaciones manuales: `004fc5b`.
+- Matriz de trazabilidad: `3415977`.
+
+Todos estos cambios se publicaron en `feature/tp6-inscripciones-tdd` sin fusionar la rama con `main`.
+
+### Pendientes reales para la entrega
+
+- Confirmar con el PO los importes y el alcance requerido del correo de inscripción.
+- Verificar la recepción real de correo si el equipo decide habilitarla.
+- Implementar o aclarar el alcance de la lectura y validación de QR.
+- Revisar la interfaz en tamaños de pantalla adicionales.
+- Solicitar revisión del equipo antes de integrar la rama con `main`.
