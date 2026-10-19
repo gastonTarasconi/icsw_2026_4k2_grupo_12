@@ -1,0 +1,30 @@
+.formulario-inscripcion { margin-top: 36px; padding: 28px; background: #f2e8cf; border: 1px solid #dfdac3; border-radius: 12px; }
+.formulario-inscripcion h3 { color: #386641; margin: 0 0 10px; }
+.formulario-inscripcion > p { font-size: 14px; color: #58644c; }
+.formulario-inscripcion form { margin-top: 24px; }
+.campos-reserva { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.formulario-inscripcion label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 700; color: #304b30; }
+.formulario-inscripcion input:not([type='checkbox']), .formulario-inscripcion select { width: 100%; height: 42px; padding: 9px 11px; border: 1px solid #bac9af; border-radius: 6px; background: white; font: inherit; color: #263d29; }
+.formulario-inscripcion input:focus-visible, .formulario-inscripcion select:focus-visible { outline: 2px solid #386641; outline-offset: 2px; }
+.campo-cantidad, .campo-email { margin-top: 18px; max-width: 420px; }
+.grupo-participante { padding: 15px; margin: 20px 0; border: 1px solid #b3c59f; background: #fffdf5; border-radius: 9px; }
+.grupo-participante legend { padding: 0 8px; font-weight: 700; color: #386641; }
+.formulario-inscripcion label.aceptacion { display: flex; flex-direction: row; gap: 12px; align-items: flex-start; margin-top: 25px; font-weight: 500; line-height: 1.5; }
+.aceptacion input { margin-top: 4px; width: 17px; height: 17px; flex-shrink: 0; accent-color: #386641; }
+.boton-reserva, .confirmacion button { margin-top: 20px; background: #386641; border: none; color: white; padding: 12px 22px; border-radius: 6px; font-weight: 700; }
+.boton-reserva:disabled { opacity: .55; cursor: not-allowed; }
+.error-reserva { background: #fff2ef; color: #a42d24; border: 1px solid #bc4749; padding: 12px; border-radius: 6px; }
+.ayuda { font-size: 13px; color: #9c532a; }
+.confirmacion { background: #eff5e4; overflow-wrap: anywhere; }
+.confirmacion code { font-size: 13px; }
+@media(max-width:650px) { .formulario-inscripcion { padding: 18px; } .campos-reserva { grid-template-columns: 1fr; } }
+
+
+/* Vista de confirmación académica: QR y correo simulado. */
+.comprobante-correo { background: #fffdf5; border: 1px solid #c7d2bb; border-radius: 9px; padding: 16px; margin-top: 20px; }
+.comprobante-correo h4, .grupo-codigos-qr h4 { color: #386641; margin: 0 0 12px; }
+.comprobante-correo p { line-height: 1.55; }
+.grupo-codigos-qr { margin-top: 22px; }
+.tarjeta-qr { display: inline-block; margin: 12px 16px 12px 0; padding: 10px; border: 1px solid #b3c59f; background: white; border-radius: 9px; text-align: center; }
+.tarjeta-qr p { margin: 5px 0 8px; }
+.tarjeta-qr img { max-width: 100%; height: auto; image-rendering: crisp-edges; }
