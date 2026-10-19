@@ -1,127 +1,351 @@
-# Eco Harmony Park
 
-TP 6 de Ingeniería y Calidad de Software. Incluye catálogo, términos, inscripciones, validaciones, persistencia SQLite, QR y correo simulado u opcionalmente mediante Gmail. La cobertura de la historia todavía tiene pendientes.
+# Eco Harmony Park — TP6 TDD
 
-## Correo simulado y Gmail
+**Materia:** Ingeniería y Calidad de Software  
+**Grupo:** 12  
+**Historia de usuario:** Inscribirme a actividad  
+**Tecnologías:** JavaScript, React, Vite, Express, SQLite, Jest y Supertest.
 
-El correo usa la paleta institucional y muestra la actividad seleccionada, fecha, turno, participantes y código de confirmación. Se envían versiones HTML y texto simple, con remitente visible **Eco Harmony Park**. La vista previa muestra el mismo HTML del envío. Los QR se adjuntan como imágenes PNG.
+## 1. Descripción del proyecto
 
-Por defecto, el mensaje se registra en una bandeja en memoria durante la sesión del servidor y se muestra una vista previa con participantes y códigos QR. No sale a internet y la bandeja se pierde al reiniciar.
+Aplicación web desarrollada para Eco Harmony Park como parte del Trabajo Práctico 6.
 
-Para envío real, copiá `backend/.env.example` a `backend/.env` y completá localmente:
+El proyecto implementa la historia de usuario **«Inscribirme a actividad»**, que permite a un visitante consultar las actividades disponibles, seleccionar una fecha y un horario, registrar participantes y obtener una confirmación de su inscripción.
+
+El desarrollo incluye pruebas automatizadas y evidencia de ciclos TDD (RED, GREEN y REFACTOR).
+
+## 2. Funcionalidades implementadas
+
+### Consulta de actividades
+
+El sistema presenta cuatro actividades:
+
+| Actividad | Edad mínima | Cupos por turno | Requiere talle |
+| --- | --- | --- | --- |
+| Safari | Sin mínimo | 8 | No |
+| Palestra | 12 años | 12 | Sí |
+| Jardinería | Sin mínimo | 12 | No |
+| Tirolesa | 8 años | 10 | Sí |
+
+Se pueden consultar las condiciones generales y particulares de cada actividad.
+
+### Inscripción individual y grupal
+
+El visitante puede:
+
+- Seleccionar una actividad.
+- Elegir una fecha y consultar los turnos disponibles.
+- Consultar los cupos restantes.
+- Indicar la cantidad de participantes.
+- Ingresar el DNI y la edad de cada participante.
+- Indicar el talle cuando la actividad lo requiere.
+- Ingresar un nombre opcional.
+- Proporcionar un correo electrónico obligatorio.
+- Aceptar los términos y condiciones.
+- Confirmar la inscripción.
+
+### Validaciones
+
+El backend comprueba:
+
+- Existencia de la actividad.
+- Cantidad válida de participantes.
+- DNI numérico y sin duplicados dentro de una inscripción.
+- Edad mínima requerida.
+- Talle válido cuando corresponde.
+- Aceptación de términos y condiciones.
+- Correo electrónico obligatorio y con formato válido.
+- Fecha válida y día de apertura del parque.
+- Horarios permitidos de 09:00 a 17:00.
+- Anticipación de reserva entre 24 horas y 15 minutos.
+- Disponibilidad de cupos.
+- Ausencia de superposición horaria para un mismo DNI.
+
+El parque permanece cerrado los lunes, el 1 de enero y el 25 de diciembre.
+
+### Persistencia
+
+Las inscripciones se almacenan en una base de datos SQLite.
+
+El repositorio utiliza una transacción al guardar la inscripción y vuelve a comprobar los cupos disponibles. Esta protección está implementada, aunque las pruebas específicas de concurrencia todavía forman parte de la revisión pendiente.
+
+### Confirmación y códigos QR
+
+Al registrar una inscripción válida se genera:
+
+- Código único de confirmación.
+- Resumen de la actividad, fecha y horario.
+- Cantidad y datos de participantes.
+- Un identificador QR por participante.
+- Vista previa del correo de confirmación.
+
+La interfaz genera las imágenes QR a partir de los identificadores recibidos.
+
+La aplicación genera los QR, pero no implementa todavía un sistema de lectura o validación de accesos en la entrada del parque.
+
+## 3. Tecnologías utilizadas
+
+**Frontend**
+- React
+- Vite
+- JavaScript
+- CSS
+- Librería `qrcode`
+
+**Backend**
+- Node.js
+- Express
+- SQLite mediante `node:sqlite`
+- Nodemailer para envío opcional de correos
+
+**Pruebas**
+- Jest
+- Supertest
+- SQLite en memoria para las pruebas de integración
+
+## 4. Requisitos
+
+- Node.js 22.13.0 o superior.
+- npm.
+- Visual Studio Code u otro editor compatible.
+
+En algunas versiones de Node.js 22 puede aparecer una advertencia sobre la API experimental de SQLite.
+
+## 5. Instalación y ejecución
+
+Los comandos deben ejecutarse desde la carpeta `TP6_GRUPO12_TDD` del repositorio del Grupo 12.
+
+### Instalar dependencias
+
+```powershell
+npm.cmd install
+```
+
+### Inicializar la base de datos
+
+```powershell
+npm.cmd run inicializar
+```
+
+La base se crea normalmente en `backend/datos/parque.sqlite`.
+
+El servidor también inicializa la base cuando se inicia. La inicialización no duplica las actividades existentes.
+
+### Iniciar el backend
+
+En una terminal:
+
+```powershell
+npm.cmd run dev:backend
+```
+
+La API estará disponible en:
+
+http://localhost:3001
+
+### Iniciar el frontend
+
+En otra terminal:
+
+```powershell
+npm.cmd run dev:frontend
+```
+
+Abrir la aplicación en:
+
+http://localhost:5173
+
+Durante el desarrollo, Vite redirige las solicitudes `/api` al servidor Express.
+
+## 6. Configuración del correo
+
+El sistema admite dos modos:
+
+### Correo simulado
+
+Es el modo predeterminado cuando no se configura otro modo.
+
+```dotenv
+CORREO_MODO=simulado
+```
+
+El mensaje se registra en una bandeja en memoria durante la sesión del servidor. La interfaz muestra su vista previa.
+
+**En este modo no se envía ningún correo real.**
+
+### Correo real mediante Gmail
+
+Para habilitar el envío real, crear localmente `backend/.env` a partir de `backend/.env.example` y configurar:
 
 ```dotenv
 CORREO_MODO=smtp
-SMTP_USUARIO=tu-cuenta@gmail.com
-SMTP_CLAVE=tu-contraseña-de-aplicación
-```
- Se adjunta un PNG QR por participante. La pantalla informa aceptación por el servidor, no entrega confirmada. Revisá la recepción, spam, resumen y adjuntos manualmente. Esa comprobación sigue pendiente hasta configurar la cuenta. Si falla el correo, la reserva sigue confirmada; no hay reintento automático ni reenvío desde la interfaz. Los tests no envían correos reales.
-
-## Requisitos
-
-Node.js 22.13 o superior y npm. Usamos `node:sqlite`, incluido en Node, para evitar instalar un motor externo. En Node 22 puede aparecer una advertencia de API experimental de SQLite.
-
-## Instalación y ejecución
-
-Desde la carpeta raíz del proyecto:
-
-```sh
-npm install
-npm run inicializar
-npm run dev:backend
+SMTP_USUARIO=correo@example.com
+SMTP_CLAVE=CLAVE_DE_APLICACION
 ```
 
-En otra terminal, desde la misma carpeta:
+Los valores anteriores son ejemplos, no credenciales reales.
 
-```sh
-npm run dev:frontend
+La clave debe ser una contraseña de aplicación válida y mantenerse exclusivamente en el archivo privado `.env`.
+
+**Nunca subir credenciales reales a GitHub ni colocarlas en `.env.example`.**
+
+El envío SMTP genera un adjunto PNG por participante. Un estado de correo aceptado por el servidor no garantiza que el mensaje haya llegado a la bandeja del destinatario.
+
+Si falla el envío, la inscripción permanece registrada. No existe reintento automático ni función de reenvío desde la interfaz.
+
+La entrega real debe comprobarse manualmente con credenciales válidas y autorizadas.
+
+## 7. Pruebas automatizadas
+
+Para ejecutar todas las pruebas:
+
+```powershell
+npm.cmd test
 ```
 
-Abrir [http://localhost:5173](http://localhost:5173). La API se ejecuta en [http://localhost:3001](http://localhost:3001). Vite redirige `/api` al backend durante el desarrollo.
+Para ejecutar una prueba específica:
 
-La base se crea en `backend/datos/parque.sqlite`. El servidor también la inicializa al arrancar. Repetir la inicialización no duplica ni sobrescribe actividades existentes. No se necesitan credenciales. No se generan turnos ni inscripciones.
-
-Opcional: copiar `backend/.env.example` a `backend/.env` para configurar puerto, origen permitido y ubicación de SQLite. Si cambiás el puerto del backend, actualizá el proxy en `frontend/vite.config.js`. Si cambiás el puerto del frontend, actualizá también CORS.
-
-## Pruebas y compilación
-
-```sh
-npm test
-npm run test:watch
-npm run build
+```powershell
+npm.cmd test --workspace backend -- --runTestsByPath tests/correoObligatorio.test.js
 ```
 
-Jest y Supertest verifican la infraestructura con una base SQLite en memoria, aislada por prueba. Los `test.todo` de inscripciones son una lista de trabajo, no pruebas aprobadas. La compilación genera `frontend/dist`; no es necesario subirla a Git. El proxy es de desarrollo: para desplegar habrá que servir el frontend y enrutar `/api` al servidor Express.
+Para comprobar la compilación:
 
-## Qué se puede probar ahora
-
-1. Abrir el inicio y consultar las cuatro actividades desde la API real.
-2. Entrar en “Ver condiciones” para cada actividad.
-3. Leer las condiciones generales y específicas y abrir el PDF original.
-4. Volver al catálogo y probar el diseño en una pantalla angosta.
-5. Detener el backend, recargar y comprobar el mensaje de error y “Reintentar”.
-
-El botón de turno está deshabilitado porque todavía falta desarrollar la inscripción. No hay un flujo completo de inscripción en esta entrega.
-
-## API disponible
-
-| Método | Ruta | Resultado |
-| --- | --- | --- |
-| GET | `/api/salud` | Estado de la API |
-| GET | `/api/actividades` | Las cuatro actividades y sus requisitos |
-| GET | `/api/actividades/:id/terminos` | Condiciones generales, específicas y estado de validación |
-
-Los identificadores son `safari`, `palestra`, `jardineria` y `tirolesa`. Las consultas devuelven 200; un recurso inexistente devuelve 404 y un error inesperado, 500, sin traza interna.
-
-```sh
-curl http://localhost:3001/api/actividades
-curl http://localhost:3001/api/actividades/palestra/terminos
+```powershell
+npm.cmd run build
 ```
 
-Ejemplo del primer elemento del catálogo:
-
-```json
-{
-  "id": "safari",
-  "nombre": "Safari",
-  "descripcion": "Un recorrido para descubrir la fauna y el entorno natural del parque.",
-  "edadMinima": 0,
-  "capacidad": 8,
-  "requiereTalla": false
-}
-```
-
-## Estructura
+### Último resultado registrado — 19/10/2026
 
 ```text
-backend/src/app.js                 Configura Express sin abrir un puerto
-backend/src/servidor.js            Arranca el servidor y la base
-backend/src/database/              Esquema e inicialización del catálogo
-backend/src/repositorios/          Consultas SQLite
-backend/src/rutas/                 Endpoints del catálogo
-backend/tests/                     Pruebas de base y pendientes de US-01
-frontend/src/componentes/          Vista de términos
-frontend/src/servicios/            Acceso a la API
-frontend/src/estilos/              Paleta y diseño adaptable
-frontend/public/                  Logo y PDF original
-docs/DECISIONES.md                 Decisiones y pendientes
+Test Suites: 10 passed, 10 total
+Tests:       18 todo, 64 passed, 82 total
 ```
 
-## Continuar con TDD y subir a Git
+El frontend también compiló correctamente.
 
-Primero subir esta base como un commit inicial. Después elegir un caso de `backend/tests/inscripciones.pendientes.test.js`, escribir una prueba concreta que falle, implementar lo mínimo y refactorizar. Ver la propuesta de trabajo en `docs/DECISIONES.md`.
+Las 64 pruebas aprobadas incluyen pruebas unitarias y de integración.
 
-```sh
-git init
-git add .
-git commit -m "Agregar base de Eco Harmony Park"
+Los 18 casos `test.todo` son recordatorios pendientes: Jest no los ejecuta y no se contabilizan como pruebas aprobadas.
+
+Estos resultados corresponden a la última ejecución registrada. Deben actualizarse si se modifica posteriormente el código o las pruebas.
+
+## 8. Desarrollo mediante TDD
+
+Se trabajó siguiendo el ciclo:
+
+**RED:** escribir una prueba y comprobar que falla por una funcionalidad todavía no implementada.
+
+**GREEN:** incorporar la implementación mínima necesaria para superar la prueba.
+
+**REFACTOR:** mejorar la organización del código conservando el comportamiento y las pruebas aprobadas.
+
+### Evidencias en Git
+
+| Ciclo | RED | GREEN | REFACTOR |
+| --- | --- | --- | --- |
+| Confirmación con resumen y QR | `d4c5ce3` | `d82bf95` | `f8e7d9d` |
+| Correo con formato inválido | `64e9547` | `8a858d3` | `d449989` |
+| Correo electrónico obligatorio | `1ef0745` | `1f13159` | `4d64ae5` |
+
+También se registró un ciclo de validación de cupos. Su evidencia está documentada, aunque no tiene tres commits independientes.
+
+La descripción detallada de las pruebas, resultados y decisiones se encuentra en `docs/CICLOS_TDD.md`.
+
+## 9. API disponible
+
+| Método | Ruta | Función |
+| --- | --- | --- |
+| GET | `/api/salud` | Verificar estado del servidor |
+| GET | `/api/actividades` | Consultar las cuatro actividades |
+| GET | `/api/actividades/:id/terminos` | Consultar términos de una actividad |
+| GET | `/api/inscripciones/turnos` | Consultar horarios y cupos |
+| POST | `/api/inscripciones` | Registrar una inscripción |
+| GET | `/api/inscripciones/:codigo` | Consultar una inscripción registrada |
+
+**Observación de seguridad:** la consulta por código actualmente devuelve información de la inscripción, incluidos datos personales. Su alcance y protección deben revisarse antes de utilizar la aplicación en un entorno público.
+
+## 10. Prueba manual de la aplicación
+
+Para verificar el funcionamiento:
+
+1. Iniciar backend y frontend.
+2. Abrir el catálogo de actividades.
+3. Seleccionar una de las cuatro actividades.
+4. Consultar sus términos y condiciones.
+5. Elegir una fecha y un turno disponible.
+6. Completar los datos de uno o más participantes.
+7. Ingresar el correo electrónico.
+8. Aceptar los términos y confirmar.
+9. Verificar el código de inscripción y los QR.
+10. Revisar el estado del correo y su vista previa.
+11. Repetir con casos inválidos y comprobar los mensajes.
+
+La selección de turnos depende de la fecha y hora del sistema, porque solamente se permiten inscripciones entre 24 horas y 15 minutos antes del inicio.
+
+Para pruebas locales controladas, el backend dispone de la variable `RELOJ_PRUEBA`. No debe utilizarse para reservas reales.
+
+## 11. Estructura principal
+
+```text
+TP6_GRUPO12_TDD/
+├── backend/
+│   ├── src/
+│   │   ├── app.js
+│   │   ├── servidor.js
+│   │   ├── database/
+│   │   ├── repositorios/
+│   │   ├── rutas/
+│   │   └── servicios/
+│   └── tests/
+├── frontend/
+│   ├── public/
+│   └── src/
+│       ├── componentes/
+│       ├── estilos/
+│       └── servicios/
+├── docs/
+│   ├── CICLOS_TDD.md
+│   ├── DECISIONES.md
+│   ├── HISTORIAL.md
+│   └── MATRIZ_TRAZABILIDAD.md
+├── package.json
+└── README.md
 ```
 
-Crear un repositorio vacío en el servicio elegido, agregar su URL con `git remote add origin URL_DEL_REPOSITORIO` y subir la rama actual. No se inicializó ni publicó un repositorio automáticamente. `.gitignore` excluye dependencias, bases locales, compilados y variables privadas; `package-lock.json` sí se versiona. Los documentos originales de la raíz quedan como referencia del TP.
+## 12. Limitaciones y verificaciones pendientes
 
+Antes de considerar la aplicación lista para un entorno real, deben revisarse:
 
+- La exposición de datos personales al consultar una inscripción.
+- Las pruebas de concurrencia con SQLite.
+- La comprobación manual de los cuatro recorridos de inscripción.
+- La recepción efectiva de correo mediante Gmail.
+- La lectura y validación de códigos QR, si se exige como parte del alcance.
+- La revisión de los 18 casos `test.todo`.
+- La aprobación de los términos particulares todavía propuestos para validación.
+- Las definiciones pendientes sobre importes y totales en la confirmación.
+- La revisión de dependencias y sus avisos de seguridad.
 
-para probar tests 
+La aplicación es una implementación académica. No se considera validada para producción.
 
+## 13. Documentación
 
-npm test --workspace backend -- --runTestsByPath tests/inscribirmeActividad.test.js
+- `docs/CICLOS_TDD.md`: evidencia de los ciclos RED, GREEN y REFACTOR.
+- `docs/MATRIZ_TRAZABILIDAD.md`: relación entre criterios, pruebas y funcionalidades.
+- `docs/DECISIONES.md`: decisiones técnicas y de alcance.
+- `docs/HISTORIAL.md`: registro de avances.
+
+## 14. Repositorio grupal
+
+El proyecto se desarrolla dentro del repositorio compartido del Grupo 12.
+
+La rama utilizada para este desarrollo es:
+
+```text
+feature/tp6-inscripciones-tdd
+```
+
+Los cambios se guardan mediante commits y se publican en esa rama.
+
+La integración a `main` debe coordinarse con el equipo. No corresponde reinicializar Git ni crear otro repositorio para este proyecto.
