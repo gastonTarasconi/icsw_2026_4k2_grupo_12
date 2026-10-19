@@ -189,6 +189,13 @@ function validarSuperposiciones(inscripciones, datos, inicio) {
 // Valida el formato del correo cuando se proporciona.
 function validarCorreo(email) {
   if (
+    email == null ||
+    (typeof email === 'string' && email.trim() === '')
+  ) {
+    throw new Error('El correo electronico es obligatorio.');
+  }
+
+  if (
     email !== undefined &&
     (
       typeof email !== 'string' ||
