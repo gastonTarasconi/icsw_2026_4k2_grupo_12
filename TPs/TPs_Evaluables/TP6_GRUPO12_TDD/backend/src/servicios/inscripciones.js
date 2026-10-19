@@ -210,6 +210,17 @@ function crearServicioInscripciones({
         );
       }
 
+      // Validar el formato del correo si fue proporcionado.
+      if (
+        datosInscripcion.email !== undefined &&
+        (
+          typeof datosInscripcion.email !== 'string' ||
+          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(datosInscripcion.email)
+        )
+      ) {
+        throw new Error('El correo electronico no es valido.');
+      }
+
       // 3. Validar participantes.
       validarParticipantes(datosInscripcion, actividad);
 
@@ -275,6 +286,7 @@ function crearServicioInscripciones({
         inscripcion,
         actividad
       );
+
       let correo;
       try {
         correo = await enviarCorreo(confirmacionCorreo);
