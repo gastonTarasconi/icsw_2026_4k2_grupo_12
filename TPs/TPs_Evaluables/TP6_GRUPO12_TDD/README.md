@@ -1,4 +1,3 @@
-
 # Eco Harmony Park — TP6 TDD
 
 **Materia:** Ingeniería y Calidad de Software  
@@ -215,7 +214,7 @@ Para comprobar la compilación:
 npm.cmd run build
 ```
 
-### Último resultado registrado — 19/10/2026
+### Resultado histórico anterior — 19/10/2026
 
 ```text
 Test Suites: 10 passed, 10 total
@@ -349,3 +348,51 @@ feature/tp6-inscripciones-tdd
 Los cambios se guardan mediante commits y se publican en esa rama.
 
 La integración a `main` debe coordinarse con el equipo. No corresponde reinicializar Git ni crear otro repositorio para este proyecto.
+
+
+---
+
+## 15. Estado final de verificacion - 19/10/2026
+
+### Pruebas automatizadas
+
+- 71 pruebas aprobadas.
+- 0 pruebas fallidas.
+- 0 pruebas pendientes.
+- 12 suites aprobadas.
+- Compilacion del frontend exitosa.
+- Jest actualizado a la version 30.5.2.
+
+### Pruebas manuales
+
+Se comprobaron desde el navegador:
+
+- Tirolesa: inscripcion individual, confirmacion y QR.
+- Palestra: inscripcion grupal con dos QR diferentes.
+- Palestra: rechazo por edad inferior a 12 años.
+- Safari: inscripcion de un participante de 5 años sin talle.
+- Jardineria: inscripcion de un participante de 6 años sin talle.
+
+Las pruebas se realizaron con un reloj simulado, una base de datos temporal y correo en modo simulado.
+
+### Seguridad y dependencias
+
+- 0 vulnerabilidades reportadas en produccion.
+- 0 alertas altas en la auditoria completa.
+- 19 alertas moderadas en dependencias de desarrollo.
+- La consulta de inscripciones devuelve un resumen sin DNI ni correo.
+- La consulta todavia no dispone de autenticacion.
+
+### Evidencia TDD adicional
+
+| Ciclo | RED | GREEN | REFACTOR |
+| --- | --- | --- | --- |
+| Privacidad de inscripciones | c2f2437 | 7116142 | eeeeb28 |
+
+### Limitaciones pendientes
+
+- No se verifico la entrega real de correo mediante Gmail.
+- No se implemento la lectura de QR para controlar el ingreso.
+- Se debe revocar la antigua contrasena de aplicacion de Gmail expuesta en el historial del repositorio.
+
+Los resultados anteriores documentados en este archivo corresponden a etapas previas del desarrollo. El estado automatizado mas reciente es de 71 pruebas aprobadas y ninguna pendiente.
