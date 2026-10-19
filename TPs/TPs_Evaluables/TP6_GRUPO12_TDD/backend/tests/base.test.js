@@ -34,7 +34,8 @@ describe('Base del sistema', () => {
     expect(respuesta.body.mensaje).toBe('No encontramos esa actividad.');
   });
 
-  test('la historia de inscripción todavía no está implementada', async () => {
-    await solicitud(aplicacion).post('/api/inscripciones').send({}).expect(404);
+  test('la ruta de inscripción existe y valida datos', async () => {
+    const respuesta = await solicitud(aplicacion).post('/api/inscripciones').send({}).expect(400);
+    expect(respuesta.body.mensaje).toContain('actividad');
   });
 });
