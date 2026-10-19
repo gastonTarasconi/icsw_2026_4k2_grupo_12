@@ -260,3 +260,102 @@ Las 64 pruebas aprobadas son pruebas automatizadas, no 64 ciclos TDD independien
 Los 18 `test.todo` no se ejecutan y no deben contabilizarse como pruebas aprobadas. Se revisarán para identificar casos ya cubiertos y faltantes reales.
 
 El envío real mediante Gmail, la validación de acceso por QR y las pruebas específicas de concurrencia requieren verificaciones adicionales antes de afirmar que están completamente comprobados.
+
+
+---
+
+## Actualización final — 19/10/2026
+
+### Ciclo 6 — Privacidad en la consulta de inscripciones
+
+**Objetivo:** evitar que la consulta pública de una inscripción devuelva información personal innecesaria.
+
+**RED — Commit `c2f2437`**
+
+Se creó `backend/tests/privacidadInscripciones.test.js`.
+
+La prueba esperaba que `GET /api/inscripciones/:codigo` devolviera solamente el código, la actividad, la fecha, el horario y la cantidad de personas.
+
+La prueba falló porque la API también devolvía correo electrónico, DNI y otros datos de los participantes.
+
+**GREEN — Commit `7116142`**
+
+Se modificó la ruta para devolver exclusivamente el resumen de la inscripción.
+
+También se actualizó la prueba de integración para comprobar que los datos personales permanecen guardados en SQLite sin ser expuestos por la consulta.
+
+Resultado: 71 pruebas aprobadas y compilación exitosa.
+
+**REFACTOR — Commit `eeeeb28`**
+
+Se extrajo la construcción del resumen público a la función `resumirInscripcion()`.
+
+No se modificó el comportamiento de almacenamiento ni el envío de confirmaciones.
+
+Resultado comprobado: 71 pruebas aprobadas, 12 suites exitosas y compilación correcta.
+
+**Limitación:** esta corrección reduce la información expuesta, pero no implementa autenticación ni autorización para consultar reservas.
+
+### Verificaciones automatizadas adicionales
+
+**Commit `928bb57` — Concurrencia de cupos**
+
+Se agregó una prueba con dos solicitudes que compiten por el último cupo de Tirolesa.
+
+Se comprobó que una solicitud se acepta, otra se rechaza y SQLite no supera los diez lugares permitidos.
+
+Esta prueba pasó desde su primera ejecución; no constituye un ciclo RED-GREEN-REFACTOR.
+
+**Commit `29ee29a` — Verificaciones complementarias**
+
+Se agregaron cinco pruebas:
+
+- Aceptación del horario límite de 09:00.
+- Aceptación del horario límite de 17:00.
+- Persistencia de la aceptación de términos en SQLite.
+- Rechazo de grupos inválidos sin registros parciales.
+- Identificadores QR sin DNI ni correo electrónico.
+
+Las cinco pruebas pasaron desde la primera ejecución.
+
+**Commit `517ce96` — Limpieza de pruebas pendientes**
+
+Se retiró el archivo de recordatorios `inscripciones.pendientes.test.js` después de revisar su cobertura.
+
+Resultado: 70 pruebas ejecutables aprobadas y ningún `test.todo`.
+
+El archivo anterior permanece disponible en el historial de Git.
+
+### Actualización de dependencias
+
+**Commit `0504e71`**
+
+Se actualizó Jest de la versión 29.7.0 a la 30.5.2.
+
+Se ejecutaron nuevamente las pruebas y la compilación, sin fallos.
+
+Resultado de la auditoría de npm:
+
+- 0 vulnerabilidades reportadas en dependencias de producción.
+- 19 alertas moderadas restantes en dependencias de desarrollo.
+- Ninguna alerta de gravedad alta en la auditoría completa.
+
+Las alertas moderadas se relacionan con dependencias transitivas de Jest, especialmente `sprintf-js`.
+
+No se utilizó `npm audit fix --force` para evitar cambios incompatibles.
+
+Esta actualización es una tarea de mantenimiento, no un ciclo TDD.
+
+### Estado automatizado final registrado
+
+Después del ciclo de privacidad y de actualizar Jest:
+
+```text
+Test Suites: 12 passed, 12 total
+Tests:       71 passed, 71 total
+Snapshots:   0 total
+```
+
+La compilación mediante `npm.cmd run build` finalizó correctamente.
+
+Estas 71 pruebas corresponden a casos automatizados ejecutados satisfactoriamente; no representan 71 ciclos TDD independientes.
