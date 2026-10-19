@@ -268,10 +268,29 @@ function crearServicioInscripciones({
       // 11. Guardar.
       await repositorio.guardarInscripcion(inscripcion);
 
-      // 12. Devolver la confirmacion.
+      // 12. Preparar la confirmacion.
+      const confirmacionCorreo = {
+        destinatario: inscripcion.email,
+        resumen: {
+          codigo: inscripcion.codigo,
+          actividad: actividad.nombre,
+          fecha: inscripcion.fecha,
+          horario: inscripcion.horario,
+          cantidadPersonas: inscripcion.cantidadPersonas
+        },
+        participantes: inscripcion.participantes.map(
+          participante => ({ ...participante })
+        ),
+        codigosQR: inscripcion.participantes.map(
+          (_, i) => `${inscripcion.codigo}-${i + 1}`
+        )
+      };
+
+      // 13. Devolver la confirmacion.
       return {
         ...inscripcion,
-        actividad
+        actividad,
+        confirmacionCorreo
       };
     }
   };
