@@ -194,3 +194,99 @@ Antes de finalizar el trabajo se deberá verificar:
 8. Dependencias y avisos de seguridad.
 
 Estos puntos se mantienen explícitamente pendientes hasta contar con evidencia de su verificación.
+
+
+---
+
+## Actualizacion de decisiones - 19/10/2026
+
+Esta seccion registra las decisiones y limitaciones vigentes al finalizar las verificaciones del TP6. Las entradas anteriores se conservan como historial del desarrollo.
+
+### 1. Privacidad de la consulta de inscripciones
+
+**Decision:** limitar la respuesta de `GET /api/inscripciones/:codigo` a los datos necesarios para identificar la reserva.
+
+La respuesta incluye codigo, actividad, fecha, horario y cantidad de participantes. No devuelve DNI, correo ni datos personales de los participantes.
+
+**Justificacion:** reducir la exposicion innecesaria de informacion personal.
+
+**Evidencia TDD:**
+
+- RED: `c2f2437`.
+- GREEN: `7116142`.
+- REFACTOR: `eeeeb28`.
+
+**Limitacion:** la consulta por codigo todavia no requiere autenticacion. Esta mejora no reemplaza un sistema de control de acceso.
+
+### 2. Manejo de cupos y concurrencia
+
+**Decision:** mantener la validacion de cupos dentro de una transaccion SQLite y rechazar inscripciones que superen la disponibilidad.
+
+**Evidencia:** `concurrenciaCupos.test.js` comprueba dos solicitudes simultaneas por el ultimo cupo de Tirolesa.
+
+**Alcance comprobado:** una instancia de la aplicacion con la base de datos utilizada en las pruebas. No se realizaron pruebas distribuidas ni de carga masiva.
+
+### 3. Confirmaciones y codigos QR
+
+**Decision:** generar un codigo QR individual por participante y mostrar la confirmacion de la inscripcion.
+
+Los identificadores utilizados en el QR no incorporan DNI ni correo electronico.
+
+**Limitacion:** la generacion del QR esta probada, pero no se implemento ni verifico un sistema de lectura y control de ingreso.
+
+### 4. Envio de correos electronicos
+
+**Decision:** conservar un modo simulado para las verificaciones y permitir la configuracion de SMTP sin incluir credenciales reales en archivos de ejemplo.
+
+Las pruebas automatizadas comprueban la logica de correo mediante transportes controlados. Las pruebas manuales se realizaron en modo simulado.
+
+**Limitacion:** no se verifico la recepcion de mensajes reales en Gmail.
+
+**Accion de seguridad pendiente:** el propietario de la cuenta debe revocar la contrasena de aplicacion que fue publicada anteriormente en el historial de Git.
+
+### 5. Actualizacion de dependencias
+
+**Decision:** actualizar Jest a la version 30.5.2 y conservarla despues de verificar su compatibilidad.
+
+**Evidencia:** commit `0504e71`.
+
+Se comprobaron:
+
+- 71 pruebas aprobadas.
+- 12 suites aprobadas.
+- 0 pruebas fallidas.
+- 0 casos `test.todo`.
+- Compilacion del frontend exitosa.
+
+La auditoria de npm reporto:
+
+- 0 vulnerabilidades en dependencias de produccion.
+- 0 vulnerabilidades altas en la auditoria completa.
+- 19 alertas moderadas asociadas a dependencias de desarrollo.
+
+**Decision:** no ejecutar `npm audit fix --force`, porque la correccion propuesta por npm implica un cambio incompatible de version de Jest.
+
+Las alertas moderadas quedan documentadas para seguimiento.
+
+### 6. Alcance de las verificaciones finales
+
+Se comprobaron manualmente las cuatro actividades del sistema:
+
+- Tirolesa.
+- Palestra.
+- Safari.
+- Jardineria.
+
+Ademas, se verificaron inscripciones grupales, codigos QR diferentes y restricciones de edad y talle segun los escenarios seleccionados.
+
+Estas pruebas utilizaron reloj simulado, base de datos temporal y correo simulado.
+
+**Decision:** conservar estas verificaciones como evidencia manual complementaria a las pruebas automatizadas, sin considerarlas nuevos ciclos TDD.
+
+### 7. Integracion con el repositorio grupal
+
+**Decision:** mantener los cambios del TP6 en la rama `feature/tp6-inscripciones-tdd` hasta que el equipo revise su integracion.
+
+No se modificara directamente `main` durante este cierre.
+
+La fusion de la rama se coordinara con el grupo.
