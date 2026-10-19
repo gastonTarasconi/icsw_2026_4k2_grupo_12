@@ -29,7 +29,6 @@ export default function InscripcionActividad({ actividad }) {
   const [errorTurnos, cambiarErrorTurnos] = useState('');
   const [confirmacion, cambiarConfirmacion] = useState(null);
   const [codigosQr, cambiarCodigosQr] = useState([]);
-  const [reintento, cambiarReintento] = useState(0);
 
   useEffect(() => {
     cambiarError('');
@@ -54,7 +53,7 @@ export default function InscripcionActividad({ actividad }) {
         if (!controlador.signal.aborted) cambiarCarga(false);
       });
     return () => controlador.abort();
-  }, [actividad.id, fecha, reintento]);
+  }, [actividad.id, fecha]);
 
   function cambiarCantidad(evento) {
     const cantidad = Number(evento.target.value);
@@ -101,9 +100,22 @@ export default function InscripcionActividad({ actividad }) {
       } catch (errorQr) {
         console.error('No fue posible generar el QR en pantalla.', errorQr);
       }
+
+    const controlador = new AbortController();
+    cambiarCarga(true);
+    consultarTurnos(actividad.id, fecha, controlador.signal)
+      .then(datos => {
+        cambiarTurnos(datos.turnos);
+        cambiarParqueCerrado(datos.cerrado);
+      })
+      .catch(error => {
+        if (error.name !== 'AbortError') cambiarErrorTurnos(error.message);
+      })
+      .finally(() => {
+        if (!controlador.signal.aborted) cambiarCarga(false);
+      });
     } catch (error) {
       cambiarError(error.message);
-      cambiarReintento(n => n + 1);
     } finally {
       cambiarGuardando(false);
     }
@@ -142,7 +154,6 @@ export default function InscripcionActividad({ actividad }) {
         cambiarCodigosQr([]);
         cambiarParticipantes([participanteVacio()]);
         cambiarTerminos(false);
-        cambiarReintento(n => n + 1);
       }}>Realizar otra inscripción</button>
     </section>;
   }
