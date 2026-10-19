@@ -63,3 +63,134 @@ El avance está registrado en el commit **`49d1959`**, dentro de la rama **`feat
 Pendientes prioritarios: confirmar requisitos del correo/importe con el PO; cerrar o justificar `test.todo`; revisar concurrencia y transacciones; ejecutar pruebas manuales de las cuatro actividades y en pantalla móvil; revisar dependencias; completar la documentación y adjuntar evidencias reales.
 
 No se implementan en esta historia compra de entradas, Mercado Pago ni panel de administración.
+
+
+---
+
+## 8. Actualización de decisiones — 19/10/2026
+
+Esta sección complementa las decisiones anteriores. Los resultados de 49 pruebas aprobadas mencionados en el documento corresponden al estado del 18/10/2026, no al estado actual.
+
+### 8.1. Validación del correo electrónico
+
+Se decidió que el correo electrónico sea obligatorio y tenga un formato válido antes de registrar una inscripción.
+
+La validación se realiza en el servicio de inscripciones, independientemente de las comprobaciones del frontend o de las restricciones de SQLite.
+
+Para facilitar el mantenimiento, se separaron tres funciones:
+
+- `correoVacio()`: detecta valores ausentes, nulos o vacíos.
+- `formatoCorreoValido()`: comprueba el formato del correo.
+- `validarCorreo()`: aplica las validaciones y genera los mensajes de error.
+
+La aplicación responde con HTTP 400 cuando el correo es inválido. No se guarda la inscripción ni se envía una confirmación en los casos probados.
+
+Esta decisión se desarrolló mediante dos ciclos TDD:
+
+**Formato inválido**
+
+- RED: `64e9547`.
+- GREEN: `8a858d3`.
+- REFACTOR: `d449989`.
+
+**Correo obligatorio**
+
+- RED: `1ef0745`.
+- GREEN: `1f13159`.
+- REFACTOR: `4d64ae5`.
+
+### 8.2. Confirmación y envío de correo
+
+Se incorporó un servicio para preparar la confirmación de inscripción con los datos de la actividad, fecha, horario, participantes y códigos QR.
+
+Se mantienen dos modalidades:
+
+- **Simulado:** no envía mensajes reales. Permite generar y consultar una confirmación durante la ejecución.
+- **SMTP:** permite intentar el envío mediante Gmail, utilizando Nodemailer y credenciales configuradas localmente.
+
+El envío SMTP incluye un archivo PNG con el código QR de cada participante.
+
+Si el transporte de correo falla, la inscripción ya registrada se conserva. El sistema informa el estado del envío de manera independiente.
+
+El resultado de las pruebas automatizadas no demuestra que el correo haya sido recibido en una cuenta real. Esa verificación continúa pendiente.
+
+### 8.3. Configuración y seguridad
+
+Se decidió conservar las credenciales privadas únicamente en `backend/.env`, excluido del seguimiento habitual de Git.
+
+El archivo `backend/.env.example` debe contener variables de ejemplo sin usuarios ni contraseñas reales. El modo predeterminado es `simulado`.
+
+Esta corrección se registró en el commit `fd6b160`.
+
+La contraseña de aplicación publicada anteriormente debe ser revocada por el propietario de la cuenta, porque quitarla del archivo no elimina su presencia en el historial del repositorio.
+
+### 8.4. Persistencia y concurrencia
+
+Se mantiene SQLite para guardar inscripciones y evitar introducir una infraestructura de base de datos externa.
+
+El repositorio utiliza `BEGIN IMMEDIATE` y revalida los cupos dentro de la transacción antes de confirmar una reserva.
+
+Se considera una protección implementada, pero todavía debe comprobarse mediante pruebas específicas de solicitudes concurrentes contra SQLite.
+
+No se considera demostrado un comportamiento que no haya sido probado.
+
+### 8.5. Información personal
+
+La inscripción necesita datos de los participantes y un correo electrónico de contacto.
+
+La ruta de consulta por código devuelve actualmente datos de la inscripción, entre ellos DNI y correo.
+
+Se decidió revisar la información expuesta por esta ruta antes de considerar que el sistema está preparado para un uso público.
+
+No se afirma que exista autenticación o un sistema de permisos de acceso, porque no se implementaron como parte de esta historia.
+
+### 8.6. Alcance de los códigos QR
+
+Se mantiene la decisión de generar un identificador por participante, sin incorporar directamente el DNI o el correo en el contenido del QR.
+
+La interfaz representa visualmente estos identificadores.
+
+La lectura y validación de los QR en el ingreso al parque no se consideran implementadas. Su necesidad debe verificarse contra el alcance solicitado.
+
+### 8.7. Pruebas y evidencia TDD
+
+El último resultado automatizado registrado el 19/10/2026 es:
+
+- 10 suites aprobadas.
+- 64 pruebas aprobadas.
+- 0 pruebas fallidas.
+- 18 casos `test.todo` sin ejecutar.
+- Compilación de frontend exitosa.
+
+Se mantienen los ciclos RED, GREEN y REFACTOR documentados en `CICLOS_TDD.md`, con los commits correspondientes.
+
+Las pruebas aprobadas no equivalen a ciclos TDD independientes.
+
+Los 18 `test.todo` se revisarán individualmente para identificar comportamientos ya cubiertos y verificaciones realmente faltantes.
+
+### 8.8. Decisiones de alcance que se mantienen
+
+Se conserva lo establecido anteriormente:
+
+- No implementar la compra de entradas ni pagos.
+- No inventar precios de actividades ni asumir que son gratuitas.
+- Consultar al Product Owner la interpretación de subtotales y total.
+- Respetar edades, cupos, talles y horarios definidos en la FAQ.
+- Mantener diferenciadas las condiciones confirmadas y las propuestas pendientes de aprobación.
+- Conservar las pruebas automatizadas y la evidencia de TDD.
+- Coordinar con el grupo la integración de la rama a `main`.
+
+## 9. Estado de revisión pendiente
+
+Antes de finalizar el trabajo se deberá verificar:
+
+1. Cobertura real de los 18 `test.todo`.
+2. Concurrencia y consistencia de los cupos en SQLite.
+3. Exposición de datos personales.
+4. Funcionamiento manual de las cuatro actividades.
+5. Presentación y comportamiento de los códigos QR.
+6. Recepción real del correo, si corresponde al alcance exigido.
+7. Correspondencia de la aplicación con la consigna y la FAQ.
+8. Dependencias y avisos de seguridad.
+
+Estos puntos se mantienen explícitamente pendientes hasta contar con evidencia de su verificación.
