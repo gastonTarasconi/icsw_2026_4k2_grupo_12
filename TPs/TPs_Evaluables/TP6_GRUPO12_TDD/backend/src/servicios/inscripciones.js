@@ -186,6 +186,19 @@ function validarSuperposiciones(inscripciones, datos, inicio) {
   }
 }
 
+// Valida el formato del correo cuando se proporciona.
+function validarCorreo(email) {
+  if (
+    email !== undefined &&
+    (
+      typeof email !== 'string' ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    )
+  ) {
+    throw new Error('El correo electronico no es valido.');
+  }
+}
+
 // Servicio principal de inscripciones.
 function crearServicioInscripciones({
   repositorio,
@@ -210,16 +223,7 @@ function crearServicioInscripciones({
         );
       }
 
-      // Validar el formato del correo si fue proporcionado.
-      if (
-        datosInscripcion.email !== undefined &&
-        (
-          typeof datosInscripcion.email !== 'string' ||
-          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(datosInscripcion.email)
-        )
-      ) {
-        throw new Error('El correo electronico no es valido.');
-      }
+      validarCorreo(datosInscripcion.email);
 
       // 3. Validar participantes.
       validarParticipantes(datosInscripcion, actividad);
