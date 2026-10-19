@@ -49,3 +49,120 @@ Historia: **Inscribirme a actividad** (Grupo 12). Registramos el trabajo realiza
 4. Verificar las reglas en SQLite ante solicitudes simultáneas y ausencia de escrituras parciales cuando se rechaza una inscripción.
 5. Revisar las cuatro actividades y el diseño responsive, resolver o justificar los `test.todo` pendientes y documentar evidencia TDD genuina.
 6. Revisar los avisos de seguridad de dependencias antes de la entrega.
+
+
+---
+
+## Actualización del 19/10/2026 — Continuación del desarrollo
+
+Los apartados anteriores registran el estado del proyecto al 18/10/2026. Esta actualización incorpora los avances posteriores y reemplaza el estado de pendientes registrado anteriormente, sin borrar el historial original.
+
+### Confirmación con resumen y códigos QR
+
+Se completó un ciclo TDD para preparar la confirmación de una inscripción con un resumen y un identificador QR por participante.
+
+- RED `d4c5ce3`: prueba de confirmación que inicialmente falló.
+- GREEN `d82bf95`: implementación del resumen y los identificadores QR.
+- REFACTOR `f8e7d9d`: separación de la preparación de la confirmación en un servicio independiente.
+
+Resultado registrado: 50 pruebas aprobadas, 18 `test.todo` y compilación exitosa.
+
+### Incorporación del servicio de correo
+
+Se integraron los cambios del commit `3805c12`, que incorporaron:
+
+- Preparación de mensajes de confirmación.
+- Envío simulado de correos.
+- Envío opcional mediante Gmail y SMTP.
+- Nuevas pruebas del correo y su presentación.
+- Actualización de la interfaz de confirmación.
+
+Resultado registrado: 59 pruebas aprobadas, 18 `test.todo` y compilación exitosa.
+
+La integración se realizó mediante `git pull --ff-only`, sin modificar la rama `main`.
+
+Las pruebas de SMTP utilizan un transporte controlado y no acreditan la recepción real de mensajes en Gmail.
+
+### Ciclo TDD — Formato de correo electrónico
+
+Se detectó que el sistema aceptaba una inscripción con un correo electrónico inválido.
+
+- RED `64e9547`: se agregó una prueba que esperaba HTTP 400, pero recibió HTTP 201.
+- GREEN `8a858d3`: se implementó la validación del formato antes de guardar.
+- REFACTOR `d449989`: se extrajo la validación a una función independiente.
+
+Resultado: 60 pruebas aprobadas, 18 `test.todo` y compilación correcta.
+
+### Corrección de seguridad
+
+Commit `fd6b160`.
+
+Se retiraron las credenciales del archivo público `backend/.env.example` y se dejó el modo simulado como configuración predeterminada.
+
+Esta corrección no constituye un ciclo TDD.
+
+La contraseña de aplicación anteriormente publicada debe ser revocada por el propietario de la cuenta, porque sigue apareciendo en el historial anterior de Git.
+
+### Ciclo TDD — Correo electrónico obligatorio
+
+Se identificó que el backend no rechazaba de manera consistente las inscripciones sin correo electrónico.
+
+Se incorporaron cuatro pruebas para:
+
+- Correo ausente.
+- Correo nulo.
+- Correo vacío.
+- Correo compuesto solamente por espacios.
+
+Commits:
+
+- RED `1ef0745`: las cuatro pruebas fallaron por mensajes incorrectos o errores técnicos.
+- GREEN `1f13159`: se agregó la validación de obligatoriedad antes de guardar.
+- REFACTOR `4d64ae5`: se separaron las funciones `correoVacio()`, `formatoCorreoValido()` y `validarCorreo()`.
+
+Resultado comprobado:
+
+```text
+Test Suites: 10 passed, 10 total
+Tests:       18 todo, 64 passed, 82 total
+```
+
+Las pruebas no registraron fallos y el frontend compiló correctamente.
+
+### Actualización de la documentación
+
+Se actualizaron los documentos para reflejar el estado actual del proyecto:
+
+- `9d16585`: ampliación de `CICLOS_TDD.md` con los ciclos documentados.
+- `a5c5ad0`: actualización del README con funcionalidades, instalación, ejecución, pruebas y limitaciones.
+- `135f243`: actualización de la matriz de trazabilidad con los criterios y las 64 pruebas aprobadas.
+
+La documentación distingue pruebas aprobadas, casos `test.todo`, ciclos TDD demostrados y funcionalidades pendientes de verificación.
+
+### Estado del proyecto al 19/10/2026
+
+Última ejecución automatizada registrada:
+
+- 64 pruebas aprobadas.
+- 0 pruebas fallidas.
+- 18 casos `test.todo` sin ejecutar.
+- 10 suites aprobadas.
+- Compilación del frontend exitosa.
+
+Los commits se publicaron en la rama `feature/tp6-inscripciones-tdd`.
+
+Estos resultados demuestran que las pruebas existentes pasan. No equivalen a una validación completa de todos los requisitos del Product Owner.
+
+## Pendientes de verificación final
+
+1. Revisar los 18 casos `test.todo` para distinguir pruebas ya cubiertas de casos realmente faltantes.
+2. Probar solicitudes concurrentes contra SQLite, especialmente cuando queda un único cupo.
+3. Revisar la información personal expuesta por la consulta de inscripciones.
+4. Probar manualmente los recorridos de las cuatro actividades y su presentación en distintos tamaños de pantalla.
+5. Comprobar, con autorización y credenciales seguras, el envío real del correo si es exigido para la entrega.
+6. Revisar la generación de QR y aclarar si la lectura y validación de acceso pertenecen al alcance de esta historia.
+7. Confirmar los términos particulares pendientes de aprobación y la interpretación de los subtotales y total mencionados por la FAQ.
+8. Revisar dependencias y avisos de seguridad.
+9. Coordinar con el grupo la revisión de la rama y su eventual integración a `main`.
+
+No se considera completada una verificación que todavía no haya sido ejecutada.
