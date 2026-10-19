@@ -155,3 +155,108 @@ El frontend compiló correctamente con Vite (`built in 2.26s`). Estas salidas de
 - Los **18 `test.todo` continúan pendientes**: no cuentan como pruebas implementadas.
 
 Commits registrados: el primer incremento consta en el historial original del repositorio; el avance con código, interfaz y tests quedó guardado en el commit **`49d1959`** de la rama `feature/tp6-inscripciones-tdd`. Un único commit de integración no representa por sí solo todos los pasos internos de TDD.
+
+
+---
+
+## Ciclos TDD adicionales — 19/10/2026
+
+Esta sección incorpora los ciclos realizados posteriormente a la documentación inicial. Se registran los commits de cada etapa y las ejecuciones observadas. Los resultados antiguos del documento corresponden a momentos anteriores del desarrollo.
+
+### Ciclo 3 — Confirmación de inscripción con resumen y QR
+
+**RED — Commit `d4c5ce3`**
+
+Se agregó `backend/tests/confirmacionCorreo.test.js` para comprobar que una inscripción válida devuelve los datos de confirmación y un identificador QR por participante.
+
+La prueba falló porque `confirmacionCorreo` todavía no estaba presente en el resultado esperado.
+
+**GREEN — Commit `d82bf95`**
+
+Se implementó la generación de la confirmación con el código de inscripción, actividad, fecha, horario, cantidad de participantes y códigos QR individuales.
+
+La nueva prueba pasó junto con las pruebas existentes.
+
+**REFACTOR — Commit `f8e7d9d`**
+
+Se separó la preparación de la confirmación en `backend/src/servicios/confirmacionCorreo.js`, conservando el comportamiento.
+
+Resultado registrado: 50 pruebas aprobadas, 18 `test.todo` y compilación correcta del frontend.
+
+Los códigos son identificadores para generar imágenes QR. Esta etapa no demuestra por sí misma una entrega real de correo electrónico.
+
+### Ciclo 4 — Rechazar correos electrónicos con formato inválido
+
+**RED — Commit `64e9547`**
+
+Se agregó `backend/tests/correoInvalido.test.js`.
+
+La prueba envió el valor `correo-sin-arroba` y esperaba HTTP 400, pero recibió HTTP 201: el sistema registraba la inscripción con ese correo.
+
+**GREEN — Commit `8a858d3`**
+
+Se incorporó la comprobación del formato del correo en el servicio, antes de guardar la inscripción.
+
+Resultado: 60 pruebas aprobadas, 18 `test.todo` y ninguna prueba fallida.
+
+**REFACTOR — Commit `d449989`**
+
+Se extrajo la validación a la función `validarCorreo()`, separándola del procedimiento principal de inscripción.
+
+Resultado: 60 pruebas aprobadas, 18 `test.todo`, compilación correcta y `git diff --check` sin observaciones.
+
+### Ciclo 5 — Exigir un correo electrónico obligatorio
+
+**RED — Commit `1ef0745`**
+
+Se agregó `backend/tests/correoObligatorio.test.js`, con cuatro casos:
+
+- Correo ausente.
+- Correo `null`.
+- Correo vacío.
+- Correo compuesto solamente por espacios.
+
+Las cuatro pruebas fallaron. El correo ausente provocaba un error técnico de SQLite y los otros casos devolvían un mensaje de formato inválido.
+
+Se esperaba HTTP 400 con el mensaje `El correo electronico es obligatorio.` y que no se guardara la inscripción ni se intentara enviar una confirmación.
+
+**GREEN — Commit `1f13159`**
+
+Se agregó la validación de obligatoriedad antes de la comprobación del formato y antes de guardar la inscripción.
+
+Resultado: 64 pruebas aprobadas, 18 `test.todo`, ninguna fallida y compilación correcta.
+
+**REFACTOR — Commit `4d64ae5`**
+
+Se separaron las responsabilidades de validación mediante:
+
+- `correoVacio()`: comprueba si el correo falta o está vacío.
+- `formatoCorreoValido()`: verifica su formato.
+- `validarCorreo()`: coordina las validaciones y los mensajes de error.
+
+Resultado final comprobado:
+
+```text
+Test Suites: 10 passed, 10 total
+Tests:       18 todo, 64 passed, 82 total
+```
+
+La compilación con `npm.cmd run build` finalizó correctamente. `git diff --check` no informó errores.
+
+### Corrección de seguridad independiente
+
+**Commit `fd6b160`**
+
+Se retiraron las credenciales del archivo público `backend/.env.example`, dejando el modo simulado por defecto.
+
+Esta modificación no constituye una etapa TDD. La contraseña de aplicación anteriormente publicada debe ser revocada por su propietario, porque permanece en el historial de Git.
+
+### Estado de las evidencias
+
+Los ciclos 3, 4 y 5 tienen commits diferenciados para RED, GREEN y REFACTOR.
+
+Las 64 pruebas aprobadas son pruebas automatizadas, no 64 ciclos TDD independientes.
+
+Los 18 `test.todo` no se ejecutan y no deben contabilizarse como pruebas aprobadas. Se revisarán para identificar casos ya cubiertos y faltantes reales.
+
+El envío real mediante Gmail, la validación de acceso por QR y las pruebas específicas de concurrencia requieren verificaciones adicionales antes de afirmar que están completamente comprobados.
