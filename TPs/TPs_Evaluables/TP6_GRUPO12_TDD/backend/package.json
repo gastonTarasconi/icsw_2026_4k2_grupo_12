@@ -9,7 +9,19 @@
     "test": "jest --runInBand",
     "test:watch": "jest --watch"
   },
-  "dependencies": { "cors": "^2.8.5", "dotenv": "^16.4.7", "express": "^4.21.2" },
-  "devDependencies": { "jest": "^29.7.0", "supertest": "^7.0.0" },
-  "jest": { "testEnvironment": "node", "clearMocks": true }
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "nodemailer": "^10.1.7",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "clearMocks": true
+  }
 }

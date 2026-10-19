@@ -1,9 +1,9 @@
 const { Router } = require('express');
 const { crearServicioInscripciones } = require('../servicios/inscripciones');
 
-function crearRutasInscripciones(repositorio, obtenerAhora = () => new Date()) {
+function crearRutasInscripciones(repositorio, obtenerAhora = () => new Date(), enviarCorreo) {
   const rutas = Router();
-  const servicio = crearServicioInscripciones({ repositorio, obtenerAhora });
+  const servicio = crearServicioInscripciones({ repositorio, obtenerAhora, enviarCorreo });
 
   rutas.get('/turnos', async (req, res) => {
     const { actividadId, fecha } = req.query;
@@ -35,7 +35,8 @@ function crearRutasInscripciones(repositorio, obtenerAhora = () => new Date()) {
       res.status(201).json({ codigo: resultado.codigo, actividad: resultado.actividad.nombre,
         fecha: resultado.fecha, horario: resultado.horario,
         cantidadPersonas: resultado.cantidadPersonas, participantes: resultado.participantes,
-        correoSimulado: resultado.email });
+        correoSimulado: resultado.email,
+        confirmacionCorreo: resultado.confirmacionCorreo, correo: resultado.correo });
     } catch (error) {
       const mensaje = error.message || 'No se pudo completar la inscripción.';
       const conflicto = /cupo|superposicion/i.test(mensaje);

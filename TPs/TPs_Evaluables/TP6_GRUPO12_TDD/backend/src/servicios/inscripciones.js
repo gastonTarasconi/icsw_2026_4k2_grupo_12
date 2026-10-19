@@ -1,6 +1,6 @@
 
 const { randomUUID } = require('node:crypto');
-const { prepararConfirmacionCorreo } = require('./confirmacionCorreo');
+const { prepararConfirmacionCorreo, crearCorreoSimulado } = require('./confirmacionCorreo');
 
 const TALLAS = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
@@ -189,7 +189,8 @@ function validarSuperposiciones(inscripciones, datos, inicio) {
 // Servicio principal de inscripciones.
 function crearServicioInscripciones({
   repositorio,
-  obtenerAhora = () => new Date()
+  obtenerAhora = () => new Date(),
+  enviarCorreo = crearCorreoSimulado().enviar
 }) {
   return {
     async inscribir(datosInscripcion) {
@@ -274,12 +275,19 @@ function crearServicioInscripciones({
         inscripcion,
         actividad
       );
+      let correo;
+      try {
+        correo = await enviarCorreo(confirmacionCorreo);
+      } catch {
+        correo = { estado: 'error' };
+      }
 
       // 13. Devolver la confirmacion.
       return {
         ...inscripcion,
         actividad,
-        confirmacionCorreo
+        confirmacionCorreo,
+        correo
       };
     }
   };

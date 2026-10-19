@@ -3,6 +3,8 @@ require('dotenv').config({ path: resolve(__dirname, '../.env') });
 const { abrirBaseDeDatos } = require('./database/conexion');
 const { inicializarBaseDeDatos } = require('./database/inicializar');
 const { crearAplicacion } = require('./app');
+const { configurarCorreo } = require('./servicios/configurarCorreo');
+const enviarCorreo = configurarCorreo();
 
 const ruta = process.env.RUTA_BASE_DATOS;
 const baseDeDatos = abrirBaseDeDatos(ruta && resolve(__dirname, '..', ruta));
@@ -15,6 +17,7 @@ if (fechaDePrueba && Number.isNaN(fechaDePrueba.getTime())) {
 }
 const aplicacion = crearAplicacion({
   baseDeDatos,
+  enviarCorreo,
   origenFrontend: process.env.ORIGEN_FRONTEND,
   ...(fechaDePrueba ? { obtenerAhora: () => new Date(fechaDePrueba.getTime()) } : {})
 });

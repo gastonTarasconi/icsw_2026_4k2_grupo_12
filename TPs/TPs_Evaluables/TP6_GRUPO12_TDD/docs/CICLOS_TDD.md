@@ -1,5 +1,19 @@
 # Registro de ciclos TDD
 
+## Presentación del correo del 19/10/2026
+
+RED ejecutado: `npm.cmd test --workspace backend -- --runTestsByPath tests/disenoCorreo.test.js`, cuatro casos fallidos porque el asunto no incluía la actividad. GREEN: plantilla HTML con paleta institucional, asunto y contenido dinámicos para las cuatro actividades, escape de datos ingresados, versión de texto y remitente visible Eco Harmony Park. La vista previa usa el mismo HTML con aislamiento mediante iframe. Regresión ejecutada: **59 passed, 18 todo**, ocho suites aprobadas y build correcto. No se envió un correo real durante esta verificación; la representación final en Gmail requiere una inscripción nueva de demostración.
+
+## Incremento de correo del 19 de octubre de 2026
+
+RED: `npm.cmd test --workspace backend -- --runTestsByPath tests/envioCorreo.test.js` dio **2 failed, 1 passed** antes de implementar el envío. Cero llamadas al transporte y ausencia de `correo.estado` causaron los fallos. El rechazo de inscripción inválida ya funcionaba; no se presenta como un RED nuevo.
+
+GREEN: se inyectó el envío, se incorporó el simulador con bandeja en memoria y se devolvieron mensaje y estado a la interfaz. `npm.cmd test`: **53 passed, 18 todo**, seis suites aprobadas.
+
+Segundo RED: `npm.cmd test --workspace backend -- --runTestsByPath tests/correoSmtp.test.js` falló por módulo `correoSmtp` inexistente, sin ejecutar los casos. GREEN: adaptador SMTP con transporte controlable, destinatario aceptado y adjuntos QR PNG, más configuración opcional para Gmail. Regresión: **55 passed, 18 todo**, siete suites aprobadas; build correcto. Las pruebas no se conectaron a Gmail. Recepción real pendiente de configuración y prueba manual.
+
+Estas son transcripciones resumidas de ejecuciones realizadas, no capturas ni commits de las fases. No se afirma una fase REFACTOR independiente: no hubo una separación adicional después del GREEN.
+
 Historia de usuario: **Inscribirme a actividad** (TP6, Grupo 12).
 
 En este archivo distinguimos los ciclos **RED → GREEN → REFACTOR** que tienen salidas registradas de las ampliaciones de pruebas cuya secuencia completa no quedó documentada. Un `test.todo` no se considera ejecutado ni constituye evidencia de TDD. Los resultados corresponden a ejecuciones de Jest realizadas durante el desarrollo del 18/10/2026.

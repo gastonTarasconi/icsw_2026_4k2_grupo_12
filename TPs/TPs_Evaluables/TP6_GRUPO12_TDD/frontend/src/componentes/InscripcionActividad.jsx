@@ -26,14 +26,19 @@ export default function InscripcionActividad({ actividad }) {
   const [aceptaTerminos, cambiarTerminos] = useState(false);
   const [guardando, cambiarGuardando] = useState(false);
   const [error, cambiarError] = useState('');
+  const [errorTurnos, cambiarErrorTurnos] = useState('');
   const [confirmacion, cambiarConfirmacion] = useState(null);
   const [codigosQr, cambiarCodigosQr] = useState([]);
   const [reintento, cambiarReintento] = useState(0);
 
   useEffect(() => {
+    cambiarError('');
+  }, [actividad.id, fecha]);
+
+  useEffect(() => {
     const controlador = new AbortController();
     cambiarCarga(true);
-    cambiarError('');
+    cambiarErrorTurnos('');
     cambiarTurnos([]);
     cambiarParqueCerrado(false);
     cambiarHorario('');
@@ -43,7 +48,7 @@ export default function InscripcionActividad({ actividad }) {
         cambiarParqueCerrado(datos.cerrado);
       })
       .catch(error => {
-        if (error.name !== 'AbortError') cambiarError(error.message);
+        if (error.name !== 'AbortError') cambiarErrorTurnos(error.message);
       })
       .finally(() => {
         if (!controlador.signal.aborted) cambiarCarga(false);
@@ -90,7 +95,7 @@ export default function InscripcionActividad({ actividad }) {
       cambiarCodigosQr([]);
       try {
         const imagenes = await Promise.all(participantes.map((_, indice) =>
-          QRCode.toDataURL(`EH-RESERVA:${resultado.codigo}:P${indice + 1}`, { margin: 2, width: 192 })
+          QRCode.toDataURL(resultado.confirmacionCorreo.codigosQR[indice], { margin: 2, width: 192 })
         ));
         cambiarCodigosQr(imagenes);
       } catch (errorQr) {
@@ -111,11 +116,16 @@ export default function InscripcionActividad({ actividad }) {
       <p><strong>Código de confirmación:</strong> <code>{confirmacion.codigo}</code></p>
       <p>La inscripción está guardada en la base de datos local.</p>
       <div className="comprobante-correo">
-        <h4>Vista previa del correo de confirmación (simulado)</h4>
-        <p><strong>Destinatario:</strong> {confirmacion.correoSimulado}</p>
-        <p><strong>Asunto:</strong> Eco Harmony Park — confirmación de inscripción</p>
-        <p>Reserva {confirmacion.codigo}. Actividad: {confirmacion.actividad}. Fecha: {confirmacion.fecha}, horario: {confirmacion.horario}. Participantes: {confirmacion.cantidadPersonas}.</p>
-        <p><strong>Atención:</strong> este correo es una simulación; todavía no se envía a la casilla.</p>
+        <h4>Vista previa del correo de confirmación</h4>
+        <p><strong>Destinatario:</strong> {confirmacion.confirmacionCorreo.destinatario}</p>
+        <p><strong>Asunto:</strong> {confirmacion.confirmacionCorreo.asunto}</p>
+        <iframe title="Diseño del correo de confirmación" sandbox="" srcDoc={confirmacion.confirmacionCorreo.html}
+          style={{ width: '100%', height: 620, border: 0, borderRadius: 12 }} />
+        <p>{confirmacion.correo.estado === 'simulado'
+          ? 'Correo simulado: registrado en la bandeja de esta sesión del servidor; no se envió a la casilla.'
+          : confirmacion.correo.estado === 'aceptado'
+            ? 'Correo aceptado por el servidor.'
+            : 'No se pudo enviar el correo. Tu inscripción sigue confirmada; conservá el código y los QR.'}</p>
       </div>
       <div className="grupo-codigos-qr">
         <h4>Códigos QR de los participantes</h4>
@@ -190,6 +200,7 @@ export default function InscripcionActividad({ actividad }) {
         <input type="checkbox" checked={aceptaTerminos} onChange={e => cambiarTerminos(e.target.checked)} required />
         <span>Leí y acepto los términos y condiciones específicos de {actividad.nombre}.</span>
       </label>
+      {errorTurnos && <p className="error-reserva" role="alert">{errorTurnos}</p>}
       {error && <p className="error-reserva" role="alert">{error}</p>}
       <button className="boton-reserva" type="submit" disabled={guardando || cargando || !horario}>
         {guardando ? 'Confirmando…' : 'Confirmar inscripción'}

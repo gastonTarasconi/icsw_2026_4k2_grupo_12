@@ -1,5 +1,7 @@
 # Matriz de trazabilidad — TP6
 
+Actualización CA-16 del 19/10/2026: `envioCorreo.test.js` incorpora `test_inscripción_a_actividad_CorreoConResumenYQR_Pasa` y `test_inscripción_a_actividad_CorreoDeInscripcionInvalida_NoPasa`, más el caso de error de envío sin perder la reserva. `correoSmtp.test.js` cubre aceptación y rechazo por un transporte controlado. Regresión ejecutada: 55 PASS y 18 TODO. La recepción en Gmail sigue pendiente de verificación manual; los estados anteriores de este documento son históricos.
+
 **US:** Como visitante quiero inscribirme a una actividad para reservar mi lugar en la misma.
 
 La tabla conserva los criterios usados en el documento original del grupo. Sus referencias corresponden a los tests visibles en `backend/tests/inscribirmeActividad.test.js` y a las verificaciones registradas. **«Caso inválido» no significa que Jest deba fallar**: un rechazo esperado debe aprobar su test automatizado. Las 18 marcas `test.todo` se mantienen como pendientes y no acreditan cobertura.

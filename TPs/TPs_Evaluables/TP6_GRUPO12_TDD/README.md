@@ -1,6 +1,21 @@
 # Eco Harmony Park
 
-Base del TP 6 de Ingeniería y Calidad de Software. Incluye catálogo, términos por actividad, logo, API Express y SQLite. La US-01 de inscripción está pendiente para desarrollarla después aplicando TDD.
+TP 6 de Ingeniería y Calidad de Software. Incluye catálogo, términos, inscripciones, validaciones, persistencia SQLite, QR y correo simulado u opcionalmente mediante Gmail. La cobertura de la historia todavía tiene pendientes.
+
+## Correo simulado y Gmail
+
+El correo usa la paleta institucional y muestra la actividad seleccionada, fecha, turno, participantes y código de confirmación. Se envían versiones HTML y texto simple, con remitente visible **Eco Harmony Park**. La vista previa muestra el mismo HTML del envío. Los QR se adjuntan como imágenes PNG.
+
+Por defecto, el mensaje se registra en una bandeja en memoria durante la sesión del servidor y se muestra una vista previa con participantes y códigos QR. No sale a internet y la bandeja se pierde al reiniciar.
+
+Para envío real, copiá `backend/.env.example` a `backend/.env` y completá localmente:
+
+```dotenv
+CORREO_MODO=smtp
+SMTP_USUARIO=tu-cuenta@gmail.com
+SMTP_CLAVE=tu-contraseña-de-aplicación
+```
+ Se adjunta un PNG QR por participante. La pantalla informa aceptación por el servidor, no entrega confirmada. Revisá la recepción, spam, resumen y adjuntos manualmente. Esa comprobación sigue pendiente hasta configurar la cuenta. Si falla el correo, la reserva sigue confirmada; no hay reintento automático ni reenvío desde la interfaz. Los tests no envían correos reales.
 
 ## Requisitos
 
