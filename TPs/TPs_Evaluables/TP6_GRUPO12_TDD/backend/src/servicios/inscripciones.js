@@ -186,22 +186,24 @@ function validarSuperposiciones(inscripciones, datos, inicio) {
   }
 }
 
-// Valida el formato del correo cuando se proporciona.
+// Comprueba si el correo esta ausente o vacio.
+function correoVacio(email) {
+  return email == null || (typeof email === 'string' && email.trim() === '');
+}
+
+// Comprueba el formato del correo.
+function formatoCorreoValido(email) {
+  return typeof email === 'string' &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+// Valida el correo antes de inscribir.
 function validarCorreo(email) {
-  if (
-    email == null ||
-    (typeof email === 'string' && email.trim() === '')
-  ) {
+  if (correoVacio(email)) {
     throw new Error('El correo electronico es obligatorio.');
   }
 
-  if (
-    email !== undefined &&
-    (
-      typeof email !== 'string' ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-    )
-  ) {
+  if (!formatoCorreoValido(email)) {
     throw new Error('El correo electronico no es valido.');
   }
 }
