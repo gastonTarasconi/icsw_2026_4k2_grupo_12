@@ -56,8 +56,8 @@ export default function InscripcionActividad({ actividad }) {
   }, [actividad.id, fecha]);
 
   function cambiarCantidad(evento) {
-    const cantidad = Number(evento.target.value);
-    if (!Number.isInteger(cantidad) || cantidad < 1 || cantidad > actividad.capacidad) return;
+    let cantidad = Number(evento.target.value);
+    if (cantidad > actividad.capacidad) cantidad = actividad.capacidad;
     cambiarParticipantes(actuales => Array.from(
       { length: cantidad }, (_, indice) => actuales[indice] ?? participanteVacio()
     ));
