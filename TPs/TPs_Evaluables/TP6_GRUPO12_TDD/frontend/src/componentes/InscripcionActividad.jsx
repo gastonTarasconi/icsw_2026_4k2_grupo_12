@@ -167,7 +167,7 @@ export default function InscripcionActividad({ actividad }) {
     const month = date.getMonth();
     const datee = date.getDate();
 
-    return day !== 0 && day !== 1 && day !== 6 && !(month === 0 && datee === 1) && !(month === 11 && datee === 25);
+    return day !== 1 && !(month === 0 && datee === 1) && !(month === 11 && datee === 25);
   };
 
   return <section className="formulario-inscripcion" aria-labelledby="titulo-reserva">
