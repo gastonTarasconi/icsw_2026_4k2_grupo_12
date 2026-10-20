@@ -20,6 +20,27 @@ describe('Base del sistema', () => {
     expect(respuesta.body.map(actividad => actividad.capacidad)).toEqual([8, 12, 12, 10]);
   });
 
+  test('CA-01 - Falla: informa un error cuando no puede consultar el catalogo', async () => {
+    const detalleInterno = 'SQLITE_IOERR: fallo interno al consultar actividades';
+    const consulta = jest.spyOn(baseDeDatos, 'prepare').mockImplementationOnce(() => {
+      throw new Error(detalleInterno);
+    });
+
+    try {
+      const respuesta = await solicitud(aplicacion)
+        .get('/api/actividades')
+        .expect(500);
+
+      expect(consulta).toHaveBeenCalled();
+      expect(respuesta.body).toEqual({ mensaje: 'No pudimos completar la consulta.' });
+      expect(Array.isArray(respuesta.body)).toBe(false);
+      expect(respuesta.text).not.toContain(detalleInterno);
+      expect(respuesta.text).not.toContain('SQLITE_IOERR');
+    } finally {
+      consulta.mockRestore();
+    }
+  });
+
   test('consulta los términos de cada actividad desde SQLite', async () => {
     for (const id of ['safari', 'palestra', 'jardineria', 'tirolesa']) {
       const respuesta = await solicitud(aplicacion).get(`/api/actividades/${id}/terminos`).expect(200);
