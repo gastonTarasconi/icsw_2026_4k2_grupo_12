@@ -178,6 +178,7 @@ export default function InscripcionActividad({ actividad }) {
         <label>Fecha
         <DatePicker
           selected={fecha}
+          minDate={new Date()}
           onChange={cambiarFecha}
           filterDate={fechasDisponibles}
           required
