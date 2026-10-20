@@ -66,10 +66,10 @@ function validarParticipantes(datos, actividad) {
     // Validar DNI.
     if (
       typeof participante.dni !== 'string' ||
-      !/^\d+$/.test(participante.dni)
+      !/^\d{8}$/.test(participante.dni)
     ) {
       throw new Error(
-        'Cada participante debe ingresar un DNI numerico.'
+        'Cada participante debe ingresar un DNI formato numérico de 8 dígitos.'
       );
     }
 
