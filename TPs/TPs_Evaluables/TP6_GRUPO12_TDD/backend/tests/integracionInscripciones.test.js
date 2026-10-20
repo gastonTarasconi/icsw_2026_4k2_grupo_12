@@ -7,6 +7,7 @@ const { crearAplicacion } = require('../src/app');
 describe('Inscripción a través de API y SQLite', () => {
   let db;
   let app;
+  let enviarCorreo;
 
   const datos = () => ({
     actividadId: 'tirolesa',
@@ -28,9 +29,11 @@ describe('Inscripción a través de API y SQLite', () => {
   beforeEach(() => {
     db = abrirBaseDeDatos(':memory:');
     inicializarBaseDeDatos(db);
+    enviarCorreo = jest.fn(async () => ({ estado: 'simulado' }));
 
     app = crearAplicacion({
       baseDeDatos: db,
+      enviarCorreo,
       obtenerAhora: () =>
         new Date('2026-10-24T09:00:00-03:00')
     });
@@ -49,6 +52,20 @@ describe('Inscripción a través de API y SQLite', () => {
     expect(respuesta.body).toEqual({ mensaje: 'Elegí una actividad y fecha válidas.' });
     expect(respuesta.body).not.toHaveProperty('turnos');
     expect(db.prepare('SELECT COUNT(*) AS n FROM inscripciones').get().n).toBe(0);
+  });
+
+  test('CA-15 - Falla: no genera confirmacion ni QR para una inscripcion rechazada', async () => {
+    const respuesta = await request(app)
+      .post('/api/inscripciones')
+      .send({ ...datos(), aceptaTerminos: false })
+      .expect(400);
+
+    expect(respuesta.body.mensaje).toMatch(/terminos/i);
+    expect(respuesta.body).not.toHaveProperty('codigo');
+    expect(respuesta.body).not.toHaveProperty('confirmacionCorreo');
+    expect(respuesta.body).not.toHaveProperty('codigosQR');
+    expect(db.prepare('SELECT COUNT(*) AS n FROM inscripciones').get().n).toBe(0);
+    expect(enviarCorreo).not.toHaveBeenCalled();
   });
 
   test('publica los horarios disponibles desde SQLite', async () => {

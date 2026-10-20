@@ -301,11 +301,12 @@ Las 71 pruebas actuales son verificaciones automatizadas, no 71 ciclos TDD indep
 
 ## 12. Casos negativos adicionales por criterio
 
-Se incorporó una prueba de backend para ampliar la evidencia de escenarios negativos:
+Se incorporaron dos pruebas de backend para ampliar la evidencia de escenarios negativos:
 
 | Criterio | Prueba adicional | Evidencia positiva existente |
 | --- | --- | --- |
 | CA-02 | `backend/tests/integracionInscripciones.test.js`: fecha inexistente, HTTP 400, motivo informado y ausencia de turnos | Consulta de turnos disponibles en el mismo archivo |
+| CA-15 | `backend/tests/integracionInscripciones.test.js`: rechazo por términos sin aceptar, sin persistencia, código de reserva, confirmación, QR ni intento de envío de correo | Registro en SQLite en integración y resumen con un identificador QR por participante en `confirmacionCorreo.test.js` |
 
 La ausencia de persistencia ante una inscripción inválida se verifica con SQLite en las pruebas de integración. No se incorporan pruebas automatizadas de frontend. El manejo visual de errores del catálogo y la ausencia de una pantalla de confirmación ante un rechazo quedan para verificación manual.
 
@@ -313,4 +314,4 @@ Un escenario negativo aprobado termina en PASS: demuestra que el sistema maneja 
 
 `npm.cmd test` ejecuta las pruebas del backend con Jest.
 
-Resultado verificado tras agregar el caso: **72 tests aprobados, 0 fallidos**, en 12 suites de backend. Este resultado reemplaza el total anterior de 71 pruebas.
+Resultado verificado tras agregar los casos: **73 tests aprobados, 0 fallidos**, en 12 suites de backend. Este resultado reemplaza el total anterior de 71 pruebas.
