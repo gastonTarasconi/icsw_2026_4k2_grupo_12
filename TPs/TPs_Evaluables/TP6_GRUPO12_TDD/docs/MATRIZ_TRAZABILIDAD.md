@@ -298,3 +298,19 @@ Los 18 recordatorios fueron revisados y el archivo `inscripciones.pendientes.tes
 La eliminación no redujo la cantidad de pruebas ejecutables aprobadas.
 
 Las 71 pruebas actuales son verificaciones automatizadas, no 71 ciclos TDD independientes.
+
+## 12. Casos negativos adicionales por criterio
+
+Se incorporó una prueba de backend para ampliar la evidencia de escenarios negativos:
+
+| Criterio | Prueba adicional | Evidencia positiva existente |
+| --- | --- | --- |
+| CA-02 | `backend/tests/integracionInscripciones.test.js`: fecha inexistente, HTTP 400, motivo informado y ausencia de turnos | Consulta de turnos disponibles en el mismo archivo |
+
+La ausencia de persistencia ante una inscripción inválida se verifica con SQLite en las pruebas de integración. No se incorporan pruebas automatizadas de frontend. El manejo visual de errores del catálogo y la ausencia de una pantalla de confirmación ante un rechazo quedan para verificación manual.
+
+Un escenario negativo aprobado termina en PASS: demuestra que el sistema maneja correctamente un rechazo o error esperado.
+
+`npm.cmd test` ejecuta las pruebas del backend con Jest.
+
+Resultado verificado tras agregar el caso: **72 tests aprobados, 0 fallidos**, en 12 suites de backend. Este resultado reemplaza el total anterior de 71 pruebas.

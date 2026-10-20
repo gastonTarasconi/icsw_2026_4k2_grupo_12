@@ -40,6 +40,17 @@ describe('Inscripción a través de API y SQLite', () => {
     db.close();
   });
 
+  test('CA-02 - Falla: rechaza una fecha inexistente sin devolver turnos', async () => {
+    const respuesta = await request(app)
+      .get('/api/inscripciones/turnos')
+      .query({ actividadId: 'tirolesa', fecha: '2026-02-30' })
+      .expect(400);
+
+    expect(respuesta.body).toEqual({ mensaje: 'Elegí una actividad y fecha válidas.' });
+    expect(respuesta.body).not.toHaveProperty('turnos');
+    expect(db.prepare('SELECT COUNT(*) AS n FROM inscripciones').get().n).toBe(0);
+  });
+
   test('publica los horarios disponibles desde SQLite', async () => {
     const r = await request(app)
       .get('/api/inscripciones/turnos')
