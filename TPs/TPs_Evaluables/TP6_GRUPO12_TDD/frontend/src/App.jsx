@@ -3,6 +3,7 @@ import { consultarActividades } from './servicios/api';
 import TerminosActividad from './componentes/TerminosActividad';
 
 const ilustraciones = { safari: '↟', palestra: '△', jardineria: '❧', tirolesa: '↗' };
+const usuarioSimulado = { nombre: 'Agus', iniciales: 'A' };
 
 export default function App() {
   const [actividades, cambiarActividades] = useState([]);
@@ -27,7 +28,17 @@ export default function App() {
 
   return <>
     <a className="saltar" href="#contenido">Ir al contenido</a>
-    <header className="cabecera"><a className="marca" href="/" aria-label="Eco Harmony Park, inicio"><img src="/logo.png" alt="Eco Harmony Park" /><span>Eco Harmony <b>Park</b></span></a><a href="#actividades" onClick={() => seleccionarActividad(null)}>Actividades</a><span className="estado">Edición académica</span></header>
+    <header className="cabecera">
+      <a className="marca" href="/" aria-label="Eco Harmony Park, inicio"><img src="/logo.png" alt="Eco Harmony Park" /><span>Eco Harmony <b>Park</b></span></a>
+      <a href="#actividades" onClick={() => seleccionarActividad(null)}>Actividades</a>
+      <div className="perfil-usuario" role="group" aria-label={`Perfil de ${usuarioSimulado.nombre}`}>
+        <span className="perfil-avatar" aria-hidden="true">{usuarioSimulado.iniciales}</span>
+        <span className="perfil-datos">
+          <strong>{usuarioSimulado.nombre}</strong>
+          <span>Visitante</span>
+        </span>
+      </div>
+    </header>
     <main id="contenido">
       {seleccionada ? <TerminosActividad key={seleccionada.id} actividad={seleccionada} alVolver={() => seleccionarActividad(null)} /> : <>
         <section className="presentacion"><div><p className="etiqueta">Naturaleza · Encuentro · Aventura</p><h1>Un día para conectar<br />con la naturaleza.</h1><p className="introduccion">Descubrí las actividades de Eco Harmony Park. Explorá, aprendé y encontrá tu próxima aventura al aire libre.</p><a className="boton" href="#actividades">Explorar actividades <span>↗</span></a><p className="horario">08:30 a 19:00 · Cerrado los lunes, el 1/1 y el 25/12</p></div><div className="imagen-marca"><img src="/logo.png" alt="Ilustración del parque con fauna y naturaleza" /></div></section>

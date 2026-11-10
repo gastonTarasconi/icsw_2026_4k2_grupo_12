@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import DatePicker from "react-datepicker";
+
 import { consultarTurnos, registrarInscripcion } from '../servicios/api';
-import '../estilos/inscripciones.css';
 import QRCode from 'qrcode';
+
+import "react-datepicker/dist/react-datepicker.css";
+import '../estilos/inscripciones.css';
 
 const TALLAS = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
-function fechaArgentina() {
+function fechaArgentina(date) {
   const partes = new Intl.DateTimeFormat('es-AR', {
     timeZone: 'America/Argentina/Buenos_Aires', year: 'numeric', month: '2-digit', day: '2-digit'
-  }).formatToParts(new Date());
+  }).formatToParts(date);
   const obtener = tipo => partes.find(parte => parte.type === tipo).value;
   return `${obtener('year')}-${obtener('month')}-${obtener('day')}`;
 }
@@ -16,7 +20,7 @@ function fechaArgentina() {
 const participanteVacio = () => ({ nombre: '', dni: '', edad: '', talla: '' });
 
 export default function InscripcionActividad({ actividad }) {
-  const [fecha, cambiarFecha] = useState(fechaArgentina);
+  const [fecha, cambiarFecha] = useState(new Date());
   const [horario, cambiarHorario] = useState('');
   const [turnos, cambiarTurnos] = useState([]);
   const [parqueCerrado, cambiarParqueCerrado] = useState(false);
@@ -41,7 +45,7 @@ export default function InscripcionActividad({ actividad }) {
     cambiarTurnos([]);
     cambiarParqueCerrado(false);
     cambiarHorario('');
-    consultarTurnos(actividad.id, fecha, controlador.signal)
+    consultarTurnos(actividad.id, fechaArgentina(fecha), controlador.signal)
       .then(datos => {
         cambiarTurnos(datos.turnos);
         cambiarParqueCerrado(datos.cerrado);
@@ -76,7 +80,7 @@ export default function InscripcionActividad({ actividad }) {
     try {
       const datos = {
         actividadId: actividad.id,
-        fecha,
+        fecha: fechaArgentina(fecha),
         horario,
         cantidadPersonas: participantes.length,
         participantes: participantes.map(p => ({
@@ -103,7 +107,7 @@ export default function InscripcionActividad({ actividad }) {
 
     const controlador = new AbortController();
     cambiarCarga(true);
-    consultarTurnos(actividad.id, fecha, controlador.signal)
+    consultarTurnos(actividad.id, fechaArgentina(fecha), controlador.signal)
       .then(datos => {
         cambiarTurnos(datos.turnos);
         cambiarParqueCerrado(datos.cerrado);
@@ -158,13 +162,27 @@ export default function InscripcionActividad({ actividad }) {
     </section>;
   }
 
+  const fechasDisponibles = (date) => {
+    const day = date.getDay();
+    const month = date.getMonth();
+    const datee = date.getDate();
+
+    return day !== 1 && !(month === 0 && datee === 1) && !(month === 11 && datee === 25);
+  };
+
   return <section className="formulario-inscripcion" aria-labelledby="titulo-reserva">
     <h3 id="titulo-reserva">Inscribirme a {actividad.nombre}</h3>
     <p>Elegí un turno y completá los datos de cada participante. Las reservas se permiten entre 24 horas y 15 minutos antes del inicio.</p>
     <form onSubmit={enviar}>
       <div className="campos-reserva">
         <label>Fecha
-          <input type="date" value={fecha} min={fechaArgentina()} onChange={e => cambiarFecha(e.target.value)} required />
+        <DatePicker
+          selected={fecha}
+          minDate={new Date()}
+          onChange={cambiarFecha}
+          filterDate={fechasDisponibles}
+          required
+        />
         </label>
         <label>Horario disponible
           <select value={horario} onChange={e => cambiarHorario(e.target.value)} required disabled={cargando}>
